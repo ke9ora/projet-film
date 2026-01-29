@@ -13,7 +13,9 @@ MÉTHODE 1 : SYSTÈME COMPLET (RECOMMANDÉ)
 
 2. Configuration :
    - Obtenir une clé API OMDb : https://www.omdbapi.com/
-   - Remplacer la clé dans scraperFilms.py (ligne 6) et exempleFilm2Graph.py (ligne 5)
+   - Copier .env.example en .env : cp .env.example .env
+   - Éditer .env et remplacer "votre_cle_api_ici" par votre clé API
+   - Le fichier .env est ignoré par Git (sécurisé)
 
 3. Préparer la liste de films :
    - Éditer listeFilms.txt (un film par ligne)
