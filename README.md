@@ -36,12 +36,12 @@ Un système complet de recommandation de films basé sur un graphe pondéré, av
 
 3. **Configurer la clé API**
    ```bash
-   cp .env.example .env
+   cp config/.env.example .env
    # Éditer .env et remplacer "votre_cle_api_ici" par votre clé OMDb
    ```
 
 4. **Préparer la liste de films**
-   - Éditer `listeFilms.txt` (un film par ligne)
+   - Éditer `data/listeFilms.txt` (un film par ligne)
    - Format : `Titre du film` ou `Titre du film|imdb_id`
 
 ## 📖 Utilisation
@@ -49,7 +49,7 @@ Un système complet de recommandation de films basé sur un graphe pondéré, av
 ### Générer le graphe complet
 
 ```bash
-python genererGrapheComplet.py
+python -m src.graph.genererGrapheComplet
 ```
 
 **Options disponibles :**
@@ -62,10 +62,10 @@ python genererGrapheComplet.py
 
 ```bash
 # Lancer le serveur
-python serveurFichier.py
+python -m src.server.serveurFichier
 
 # Ouvrir dans le navigateur
-# http://localhost:8000/index.html
+# http://localhost:8000/web/index.html
 ```
 
 **Contrôles 3D :**
@@ -77,33 +77,45 @@ python serveurFichier.py
 
 ```
 exemple_filmGraph/
-├── scraperFilms.py              # Web scraping avec Cinemagoer + OMDb
-├── enrichirBaseFilms.py         # Enrichissement avec films similaires
-├── calculSimilarites.py         # Calcul des poids des arêtes
-├── filtrageGraphe.py            # Filtrage et layout 3D
-├── algorithmeRecommandation.py  # Système de recommandation
-├── genererGrapheComplet.py      # Script principal
-├── exempleFilm2Graph.py         # Exemple simple
-├── serveurFichier.py            # Serveur HTTP
-├── index.html                   # Visualisation 3D
-├── billboard.vert/.frag         # Shaders WebGL
-├── listeFilms.txt               # Liste des films à traiter
-├── requirements.txt             # Dépendances Python
-├── .env.example                 # Modèle de configuration
-└── README.md                    # Ce fichier
+├── src/
+│   ├── data/
+│   │   ├── scraperFilms.py              # Web scraping avec Cinemagoer + OMDb
+│   │   └── enrichirBaseFilms.py         # Enrichissement avec films similaires
+│   ├── graph/
+│   │   ├── calculSimilarites.py         # Calcul des poids des arêtes
+│   │   ├── filtrageGraphe.py            # Filtrage et layout 3D
+│   │   └── genererGrapheComplet.py      # Script principal
+│   ├── reco/
+│   │   └── algorithmeRecommandation.py  # Système de recommandation
+│   ├── examples/
+│   │   └── exempleFilm2Graph.py         # Exemple simple
+│   └── server/
+│       └── serveurFichier.py            # Serveur HTTP
+├── web/
+│   ├── index.html                       # Visualisation 3D
+│   └── shaders/
+│       ├── billboard.vert               # Shader vertex
+│       └── billboard.frag               # Shader fragment
+├── data/
+│   └── listeFilms.txt                   # Liste des films à traiter
+├── output/                              # Sorties générées (graphe + posters)
+├── requirements.txt                     # Dépendances Python
+├── config/
+│   └── .env.example                     # Modèle de configuration
+└── README.md                            # Ce fichier
 ```
 
 ## 🔒 Sécurité
 
 - La clé API est stockée dans `.env` (ignoré par Git)
 - Ne jamais commiter le fichier `.env`
-- Utiliser `.env.example` comme modèle
+- Utiliser `config/.env.example` comme modèle
 
 ## 📝 Exemple de Sortie
 
 Le script génère :
-- `films_data.json` : Cache des données scrappées
-- `graph.json` : Graphe avec positions 3D et arêtes filtrées
+- `output/films_data.json` : Cache des données scrappées
+- `output/graph.json` : Graphe avec positions 3D et arêtes filtrées
 - Recommandations affichées dans la console
 
 ## 🛠️ Technologies

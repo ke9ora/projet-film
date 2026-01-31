@@ -1,8 +1,5 @@
-# Fichiers g√©n√©r√©s
-films_data.json
-graph.json
-*.jpg
-*.png
+# Fichiers gÈnÈrÈs
+output/
 
 # Fichiers sensibles (cl√©s API, tokens)
 .env
@@ -30,3 +27,4 @@ venv/
 .DS_Store
 Thumbs.db
 .env.example
+

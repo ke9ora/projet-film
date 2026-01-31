@@ -4,14 +4,19 @@ Module d'algorithme de recommandation de films
 Identifie les films les plus connectés aux films connus
 """
 import json
+import os
 from collections import defaultdict
+
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
 def charger_films_connus(fichier="listeFilms.txt"):
     """
-    Charge la liste des films connus depuis listeFilms.txt
+    Charge la liste des films connus depuis data/listeFilms.txt
     Retourne un set des titres (en majuscules pour comparaison)
     """
+    if not os.path.isabs(fichier):
+        fichier = os.path.join(PROJECT_ROOT, "data", fichier)
     try:
         with open(fichier, "r", encoding="utf-8") as f:
             films = {ligne.strip().upper() for ligne in f if ligne.strip()}
@@ -135,7 +140,7 @@ def recommander(films_data, aretes, titres_connus=None, top_n=10, penaliser_popu
     Args:
         films_data: Liste des données de tous les films
         aretes: Liste des arêtes du graphe
-        titres_connus: Set des titres de films connus (ou None pour charger depuis listeFilms.txt)
+        titres_connus: Set des titres de films connus (ou None pour charger depuis data/listeFilms.txt)
         top_n: Nombre de recommandations à retourner
         penaliser_populaires: Si True, pénalise les films trop populaires
     
@@ -210,7 +215,7 @@ def afficher_recommandations(recommandations):
 if __name__ == "__main__":
     # Test du module
     try:
-        import calculSimilarites
+        from src.graph import calculSimilarites
         
         films = calculSimilarites.charger_films_data()
         if films:

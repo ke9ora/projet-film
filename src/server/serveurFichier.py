@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 from http.server import HTTPServer, SimpleHTTPRequestHandler, test
+import os
 import sys
 
-class CORSRequestHandler (SimpleHTTPRequestHandler):
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+class CORSRequestHandler(SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=PROJECT_ROOT, **kwargs)
+
     def end_headers (self):
         self.send_header('Access-Control-Allow-Origin', '*')
         SimpleHTTPRequestHandler.end_headers(self)

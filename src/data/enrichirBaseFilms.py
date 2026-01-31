@@ -6,7 +6,7 @@ Utilise Cinemagoer pour trouver des films avec les mêmes acteurs, réalisateurs
 import json
 import os
 from imdb import Cinemagoer
-import scraperFilms
+from src.data import scraperFilms
 
 
 def trouver_films_par_acteur(ia, nom_acteur, limite=5):

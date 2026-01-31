@@ -5,7 +5,10 @@ Filtre les arêtes selon un seuil de poids et calcule un layout 3D
 """
 import json
 import math
+import os
 import random
+
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 # Seuil de poids configurable
 # Les arêtes avec un poids inférieur seront supprimées
@@ -137,6 +140,9 @@ def generer_graph_json(films_data, aretes_filtrees, positions, output_file="grap
         "edges": edges
     }
     
+    output_dir = os.path.dirname(output_file)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(graph, f, indent=2, ensure_ascii=False)
     
@@ -164,7 +170,7 @@ def filtrer_et_generer_graphe(films_data, aretes, seuil=SEUIL_POIDS, output_file
 if __name__ == "__main__":
     # Test du module
     try:
-        import calculSimilarites
+        from src.graph import calculSimilarites
         
         films = calculSimilarites.charger_films_data()
         if films:

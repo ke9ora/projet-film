@@ -5,6 +5,10 @@ Calcule les poids des arêtes du graphe basé sur les similarités
 """
 import json
 import math
+import os
+
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+OUTPUT_DIR = os.path.join(PROJECT_ROOT, "output")
 
 
 def calculer_similarite_acteurs(film1, film2):
@@ -156,6 +160,8 @@ def charger_films_data(fichier="films_data.json"):
     """
     Charge les données des films depuis un fichier JSON
     """
+    if not os.path.isabs(fichier):
+        fichier = os.path.join(OUTPUT_DIR, fichier)
     try:
         with open(fichier, "r", encoding="utf-8") as f:
             data = json.load(f)

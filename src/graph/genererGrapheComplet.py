@@ -5,11 +5,11 @@ Orchestre tous les modules : scraping, calcul de similarités, filtrage, recomma
 """
 import os
 import sys
-import scraperFilms
-import calculSimilarites
-import filtrageGraphe
-import algorithmeRecommandation
-import enrichirBaseFilms
+from src.data import enrichirBaseFilms
+from src.data import scraperFilms
+from src.graph import calculSimilarites
+from src.graph import filtrageGraphe
+from src.reco import algorithmeRecommandation
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
     print("Étape 1: Lecture de la liste des films...")
     liste_films = scraperFilms.lire_liste_films()
     if not liste_films:
-        print("✖ Aucun film dans listeFilms.txt")
+        print("✖ Aucun film dans data/listeFilms.txt")
         return
     
     print(f"✔ {len(liste_films)} films à traiter")
@@ -96,7 +96,7 @@ def main():
         films_data,
         aretes,
         seuil=seuil,
-        output_file="graph.json"
+        output_file=os.path.join("output", "graph.json")
     )
     print()
     
@@ -124,9 +124,9 @@ def main():
     print(f"Arêtes après filtrage (seuil={seuil}): {len(graph['edges'])}")
     print(f"Recommandations générées: {len(recommandations)}")
     print()
-    print("✔ Graphe généré avec succès dans graph.json")
-    print("   Lancez le serveur: python serveurFichier.py")
-    print("   Puis ouvrez: http://localhost:8000/index.html")
+    print("✔ Graphe généré avec succès dans output/graph.json")
+    print("   Lancez le serveur: python -m src.server.serveurFichier")
+    print("   Puis ouvrez: http://localhost:8000/web/index.html")
 
 
 if __name__ == "__main__":

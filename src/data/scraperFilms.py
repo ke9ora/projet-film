@@ -9,6 +9,10 @@ from imdb import Cinemagoer
 import requests
 from urllib.parse import quote_plus
 
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+OUTPUT_DIR = os.path.join(PROJECT_ROOT, "output")
+POSTERS_DIR = os.path.join(OUTPUT_DIR, "posters")
+
 # Charger la clé API depuis .env ou utiliser une variable d'environnement
 def load_api_key():
     """Charge la clé API depuis .env ou variable d'environnement"""
@@ -17,17 +21,21 @@ def load_api_key():
     if api_key:
         return api_key
     
-    # Sinon, essayer de charger depuis .env
-    env_file = os.path.join(os.path.dirname(__file__), '.env')
-    if os.path.exists(env_file):
-        try:
-            with open(env_file, 'r') as f:
-                for line in f:
-                    line = line.strip()
-                    if line.startswith('OMDB_API_KEY='):
-                        return line.split('=', 1)[1].strip()
-        except Exception:
-            pass
+    # Sinon, essayer de charger depuis .env à la racine ou dans config/
+    env_paths = [
+        os.path.join(PROJECT_ROOT, ".env"),
+        os.path.join(PROJECT_ROOT, "config", ".env"),
+    ]
+    for env_file in env_paths:
+        if os.path.exists(env_file):
+            try:
+                with open(env_file, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line.startswith("OMDB_API_KEY="):
+                            return line.split("=", 1)[1].strip()
+            except Exception:
+                pass
     
     # Fallback (ne devrait pas arriver en production)
     return os.getenv('OMDB_API_KEY', 'b64880b7')
@@ -72,12 +80,14 @@ def telecharger_poster_omdb(titre_film, imdb_id=None):
         poster_url = data.get("Poster")
         if poster_url and poster_url != "N/A":
             filename = filenamePoster(titre_film)
+            os.makedirs(POSTERS_DIR, exist_ok=True)
+            poster_path = os.path.join(POSTERS_DIR, filename)
             img = requests.get(poster_url, timeout=10)
             img.raise_for_status()
-            with open(filename, 'wb') as f:
+            with open(poster_path, "wb") as f:
                 f.write(img.content)
             print(f"✔ Poster téléchargé : {filename}")
-            return filename
+            return os.path.join("output", "posters", filename)
     except Exception as e:
         print(f"✖ Erreur lors du téléchargement du poster pour '{titre_film}': {e}")
     return None
@@ -282,6 +292,8 @@ def lire_liste_films(fichier="listeFilms.txt"):
     Format: "Titre du film" ou "Titre du film|imdb_id"
     Un film par ligne
     """
+    if not os.path.isabs(fichier):
+        fichier = os.path.join(PROJECT_ROOT, "data", fichier)
     if not os.path.exists(fichier):
         print(f"✖ Fichier '{fichier}' non trouvé")
         return []
@@ -308,6 +320,9 @@ def scraper_tous_films(liste_films=None, cache_file="films_data.json", force_rel
     """
     # Charger depuis le cache si disponible
     films_data = []
+    if not os.path.isabs(cache_file):
+        cache_file = os.path.join(OUTPUT_DIR, cache_file)
+    os.makedirs(os.path.dirname(cache_file), exist_ok=True)
     if os.path.exists(cache_file) and not force_reload:
         try:
             with open(cache_file, "r", encoding="utf-8") as f:
@@ -368,6 +383,8 @@ def charger_films_data(fichier="films_data.json"):
     """
     Charge les données des films depuis le fichier de cache
     """
+    if not os.path.isabs(fichier):
+        fichier = os.path.join(OUTPUT_DIR, fichier)
     if not os.path.exists(fichier):
         return []
     

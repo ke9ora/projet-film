@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Graphe de Films — Visualisation</title>
+  <style>
+    :root {
+      --bg-1: #0b0f14;
+      --bg-2: #101722;
+      --fg: #e9eef7;
+      --muted: #9fb0c7;
+      --accent: #f4c24d;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(1200px 800px at 15% 20%, #141b29, var(--bg-1));
+      color: var(--fg);
+      overflow: hidden;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+    #hud {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 10;
+      background: rgba(8, 12, 18, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 10px 12px;
+      max-width: 340px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    }
+    #hud h1 {
+      font-size: 14px;
+      margin: 0 0 6px 0;
+      letter-spacing: 0.3px;
+    }
+    #hud p {
+      margin: 6px 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    #hud .status {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    #error {
+      position: fixed;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 10;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(40, 10, 10, 0.8);
+      border: 1px solid rgba(255, 80, 80, 0.35);
+      color: #ffd7d7;
+      font-size: 12px;
+      display: none;
+      white-space: pre-wrap;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="hud">
+    <h1>Graphe de films</h1>
+    <p class="status" id="status">Chargement du graphe…</p>
+    <p>Contrôles : clic + glisser pour orbiter, molette pour zoomer, clic droit pour déplacer.</p>
+  </div>
+  <div id="error"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script>
+    (async function () {
+      const statusEl = document.getElementById("status");
+      const errorEl = document.getElementById("error");
+
+      function showError(message) {
+        errorEl.textContent = message;
+        errorEl.style.display = "block";
+      }
+
+      function resolveTexturePath(name) {
+        if (!name) return "";
+        if (name.startsWith("output/") || name.startsWith("web/")) return "../" + name;
+        if (name.includes("/")) return "../" + name;
+        return "../output/posters/" + name;
+      }
+
+      let graph;
+      try {
+        const res = await fetch("../output/graph.json");
+        if (!res.ok) {
+          throw new Error("Impossible de charger output/graph.json (" + res.status + ")");
+        }
+        graph = await res.json();
+      } catch (err) {
+        showError("Erreur chargement graphe : " + err.message);
+        statusEl.textContent = "Erreur de chargement";
+        return;
+      }
+
+      if (!graph.nodes || !graph.nodes.length) {
+        showError("Le graphe est vide (0 nœud). Regénère output/graph.json.");
+        statusEl.textContent = "Graphe vide";
+        return;
+      }
+
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.Fog(0x0b0f14, 80, 400);
+
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      document.body.appendChild(renderer.domElement);
+
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+      const dir = new THREE.DirectionalLight(0xffffff, 0.6);
+      dir.position.set(50, 80, 60);
+      scene.add(dir);
+
+      // Center + range
+      let minX = Infinity, maxX = -Infinity;
+      let minY = Infinity, maxY = -Infinity;
+      let minZ = Infinity, maxZ = -Infinity;
+      graph.nodes.forEach(n => {
+        minX = Math.min(minX, n.x);
+        maxX = Math.max(maxX, n.x);
+        minY = Math.min(minY, n.y);
+        maxY = Math.max(maxY, n.y);
+        minZ = Math.min(minZ, n.z);
+        maxZ = Math.max(maxZ, n.z);
+      });
+      const center = new THREE.Vector3(
+        (minX + maxX) / 2,
+        (minY + maxY) / 2,
+        (minZ + maxZ) / 2
+      );
+      const range = Math.max(maxX - minX, maxY - minY, maxZ - minZ);
+
+      camera.position.set(center.x, center.y, center.z + Math.max(60, range * 1.6));
+      controls.target.copy(center);
+
+      // Nodes
+      const textureLoader = new THREE.TextureLoader();
+      const spriteGroup = new THREE.Group();
+      const fallbackGeometry = new THREE.SphereGeometry(Math.max(1.2, range * 0.01), 16, 16);
+      const fallbackMaterial = new THREE.MeshStandardMaterial({ color: 0xf4c24d });
+
+      for (const n of graph.nodes) {
+        const texPath = resolveTexturePath(n.texture);
+        if (texPath) {
+          const tex = textureLoader.load(
+            texPath,
+            undefined,
+            undefined,
+            () => {
+              // fallback if texture fails
+            }
+          );
+          const spriteMat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+          const sprite = new THREE.Sprite(spriteMat);
+          sprite.position.set(n.x, n.y, n.z);
+          const size = Math.max(6, range * 0.06);
+          sprite.scale.set(size, size, 1);
+          spriteGroup.add(sprite);
+        } else {
+          const sphere = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
+          sphere.position.set(n.x, n.y, n.z);
+          spriteGroup.add(sphere);
+        }
+      }
+      scene.add(spriteGroup);
+
+      // Edges
+      if (graph.edges && graph.edges.length) {
+        const positions = [];
+        for (const e of graph.edges) {
+          const a = graph.nodes[e.from];
+          const b = graph.nodes[e.to];
+          if (!a || !b) continue;
+          positions.push(a.x, a.y, a.z);
+          positions.push(b.x, b.y, b.z);
+        }
+        const edgeGeo = new THREE.BufferGeometry();
+        edgeGeo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+        const edgeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.35 });
+        const edges = new THREE.LineSegments(edgeGeo, edgeMat);
+        scene.add(edges);
+      }
+
+      statusEl.textContent = "Graphe chargé (" + graph.nodes.length + " nœuds)";
+
+      function onResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      window.addEventListener("resize", onResize);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+    })();
+  </script>
+</body>
+</html>
