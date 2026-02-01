@@ -5,11 +5,44 @@ Orchestre tous les modules : scraping, calcul de similarités, filtrage, recomma
 """
 import os
 import sys
+import csv
 from src.data import enrichirBaseFilms
 from src.data import scraperFilms
 from src.graph import calculSimilarites
 from src.graph import filtrageGraphe
 from src.reco import algorithmeRecommandation
+
+def exporter_csv(films_data, aretes_filtrees, output_dir="output"):
+    """Exporte les noeuds et aretes en CSV (consigne)"""
+    os.makedirs(output_dir, exist_ok=True)
+    nodes_path = os.path.join(output_dir, "nodes.csv")
+    edges_path = os.path.join(output_dir, "edges.csv")
+
+    with open(nodes_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["id", "titre", "annee", "genres", "realisateur", "acteurs", "note", "poster"])
+        for i, film in enumerate(films_data):
+            genres = "|".join(film.get("genres", []) or [])
+            acteurs = "|".join(film.get("acteurs", []) or [])
+            writer.writerow([
+                i,
+                film.get("titre", ""),
+                film.get("annee", ""),
+                genres,
+                film.get("realisateur", ""),
+                acteurs,
+                film.get("note", ""),
+                film.get("poster", ""),
+            ])
+
+    with open(edges_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["from", "to", "weight"])
+        for arete in aretes_filtrees:
+            writer.writerow([arete.get("from"), arete.get("to"), arete.get("weight")])
+
+    print(f"✔ CSV exportes : {nodes_path}, {edges_path}")
+
 
 
 def main():
@@ -114,6 +147,10 @@ def main():
     else:
         print("Aucune recommandation disponible")
     print()
+    # 6. Export CSV (consigne)
+    exporter_csv(films_data, aretes_filtrees, output_dir="output")
+    print()
+
     
     # Résumé final
     print("="*60)

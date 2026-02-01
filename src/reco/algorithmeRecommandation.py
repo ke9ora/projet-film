@@ -34,6 +34,8 @@ def identifier_films_connus(films_data, titres_connus):
     indices_connus = set()
     
     for i, film in enumerate(films_data):
+        if not isinstance(film, dict):
+            continue
         titre = film.get("titre", "").upper()
         titre_original = film.get("titre_original", "").upper()
         
@@ -199,10 +201,15 @@ def afficher_recommandations(recommandations):
     print("="*60)
     
     for i, (idx, score, film) in enumerate(recommandations, 1):
+        if not isinstance(film, dict):
+            film = {}
         titre = film.get("titre", "Inconnu")
         annee = film.get("annee", "?")
         note = film.get("note", "?")
-        genres = ", ".join(film.get("genres", [])[:3])
+        genres_list = film.get("genres") or []
+        if not isinstance(genres_list, list):
+            genres_list = []
+        genres = ", ".join(genres_list[:3])
         
         print(f"\n{i}. {titre} ({annee})")
         print(f"   Score: {score:.4f}")

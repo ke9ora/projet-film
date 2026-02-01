@@ -9,6 +9,25 @@ from imdb import Cinemagoer
 from src.data import scraperFilms
 
 
+def trouver_films_recommandes(ia, movie_id, limite=10):
+    """
+    Récupère les recommandations IMDb pour un film (IDs IMDb).
+    """
+    try:
+        movie = ia.get_movie(int(movie_id), info=['recommendations'])
+        recos = movie.get('recommendations', []) or movie.get('recommended', [])
+        ids = []
+        for rec in recos:
+            rec_id = rec.get('movieID') if isinstance(rec, dict) else getattr(rec, 'movieID', None)
+            if rec_id:
+                ids.append(str(rec_id).zfill(7))
+            if len(ids) >= limite:
+                break
+        return ids
+    except Exception as e:
+        print(f"  ⚠ Erreur recommandations IMDb pour {movie_id}: {e}")
+        return []
+
 def trouver_films_par_acteur(ia, nom_acteur, limite=5):
     """
     Trouve des films avec un acteur donné
@@ -19,25 +38,37 @@ def trouver_films_par_acteur(ia, nom_acteur, limite=5):
         if not personnes:
             return []
         
-        personne = ia.get_person(personnes[0].personID)
+        try:
+            personne = ia.get_person(personnes[0].personID, info=['filmography'])
+        except Exception:
+            personne = ia.get_person(personnes[0].personID)
+            try:
+                ia.update(personne, ['filmography'])
+            except Exception:
+                pass
         films = personne.get('filmography', {}).get('actor', [])
         if not films:
             films = personne.get('filmography', {}).get('actress', [])
+        if not films:
+            for key in ('cast', 'self', 'archive_footage'):
+                films = personne.get('filmography', {}).get(key, [])
+                if films:
+                    break
+        if not films:
+            print(f"  âš  Aucune filmographie trouvÃ©e pour l'acteur '{nom_acteur}'")
         
         # Filtrer pour ne garder que les films (pas les séries)
         film_ids = []
         for film in films[:limite * 2]:  # Prendre plus pour filtrer
-            if hasattr(film, 'get') or isinstance(film, dict):
-                movie_id = film.get('movieID') if isinstance(film, dict) else getattr(film, 'movieID', None)
-                if movie_id:
-                    try:
-                        movie = ia.get_movie(movie_id)
-                        if movie.get('kind') == 'movie':  # Uniquement les films
-                            film_ids.append(str(movie_id).zfill(7))
-                            if len(film_ids) >= limite:
-                                break
-                    except:
-                        continue
+            movie_id = film.get('movieID') if isinstance(film, dict) else getattr(film, 'movieID', None)
+            if not movie_id:
+                continue
+            kind = film.get('kind') if isinstance(film, dict) else getattr(film, 'kind', None)
+            if kind and kind != 'movie':
+                continue
+            film_ids.append(str(movie_id).zfill(7))
+            if len(film_ids) >= limite:
+                break
         
         return film_ids
     except Exception as e:
@@ -55,20 +86,32 @@ def trouver_films_par_realisateur(ia, nom_realisateur, limite=5):
         if not personnes:
             return []
         
-        personne = ia.get_person(personnes[0].personID)
+        try:
+            personne = ia.get_person(personnes[0].personID, info=['filmography'])
+        except Exception:
+            personne = ia.get_person(personnes[0].personID)
+            try:
+                ia.update(personne, ['filmography'])
+            except Exception:
+                pass
         films = personne.get('filmography', {}).get('director', [])
+        if not films:
+            for key in ('assistant_director', 'producer'):
+                films = personne.get('filmography', {}).get(key, [])
+                if films:
+                    break
+        if not films:
+            print(f"  âš  Aucune filmographie trouvÃ©e pour le rÃ©alisateur '{nom_realisateur}'")
         
         film_ids = []
         for film in films[:limite]:
-            if hasattr(film, 'get') or isinstance(film, dict):
-                movie_id = film.get('movieID') if isinstance(film, dict) else getattr(film, 'movieID', None)
-                if movie_id:
-                    try:
-                        movie = ia.get_movie(movie_id)
-                        if movie.get('kind') == 'movie':
-                            film_ids.append(str(movie_id).zfill(7))
-                    except:
-                        continue
+            movie_id = film.get('movieID') if isinstance(film, dict) else getattr(film, 'movieID', None)
+            if not movie_id:
+                continue
+            kind = film.get('kind') if isinstance(film, dict) else getattr(film, 'kind', None)
+            if kind and kind != 'movie':
+                continue
+            film_ids.append(str(movie_id).zfill(7))
         
         return film_ids
     except Exception as e:
@@ -118,6 +161,7 @@ def enrichir_base_films(films_data, max_films_par_critere=3, cache_file="films_d
     # Pour chaque film, chercher des films similaires
     for film in films_data:
         print(f"Recherche de films similaires à '{film.get('titre', 'Inconnu')}'...")
+        added_before = len(nouveaux_ids)
         
         # Par réalisateur
         realisateur = film.get("realisateur")
@@ -138,6 +182,27 @@ def enrichir_base_films(films_data, max_films_par_critere=3, cache_file="films_d
                     nouveaux_ids.add(movie_id)
             if ids:
                 print(f"  ✔ {len([id for id in ids if id not in imdb_ids_existants])} nouveaux films trouvés (acteur: {acteur})")
+
+        # Par recommandations IMDb (souvent le plus efficace avec peu de données)
+        if film.get("imdb_id"):
+            ids = trouver_films_recommandes(ia, film.get("imdb_id"), limite=max_films_par_critere * 2)
+            for movie_id in ids:
+                if movie_id not in imdb_ids_existants:
+                    nouveaux_ids.add(movie_id)
+            if ids:
+                print(f"  ✔ {len([id for id in ids if id not in imdb_ids_existants])} nouveaux films trouvés (recommandations IMDb)")
+
+        # Fallback OMDb: recherche par titre si aucune découverte
+        if len(nouveaux_ids) == added_before:
+            titre = film.get("titre") or film.get("titre_original") or ""
+            ids = scraperFilms.search_omdb_by_title(titre, max_results=max_films_par_critere * 2)
+            for movie_id in ids:
+                if movie_id not in imdb_ids_existants:
+                    nouveaux_ids.add(movie_id)
+            if ids:
+                print(f"  ✔ {len([id for id in ids if id not in imdb_ids_existants])} nouveaux films trouvés (OMDb search)")
+            else:
+                print("  ⚠ Aucun résultat OMDb (search)")
     
     print(f"\n✔ {len(nouveaux_ids)} nouveaux films identifiés à scraper")
     

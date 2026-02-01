@@ -24,7 +24,7 @@
     }
     #hud {
       position: fixed;
-      top: 12px;
+      top: 52px;
       left: 12px;
       z-index: 10;
       background: rgba(8, 12, 18, 0.75);
@@ -68,9 +68,52 @@
     canvas {
       display: block;
     }
+    header {
+      position: fixed;
+      top: 8px;
+      left: 12px;
+      right: 12px;
+      z-index: 11;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: rgba(10, 14, 20, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(6px);
+      font-size: 12px;
+    }
+    header .brand {
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    header nav {
+      display: flex;
+      gap: 8px;
+    }
+    header a {
+      color: var(--fg);
+      text-decoration: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+    }
+    header a.active {
+      border-color: rgba(244, 194, 77, 0.5);
+      color: var(--accent);
+    }
   </style>
 </head>
 <body>
+  <header>
+    <div class="brand">FilmGraph</div>
+    <nav>
+      <a class="active" href="index.html">Graphe 3D</a>
+      <a href="reco.html">Recommandations</a>
+    </nav>
+  </header>
   <div id="hud">
     <h1>Graphe de films</h1>
     <p class="status" id="status">Chargement du graphe…</p>
@@ -92,8 +135,15 @@
 
       function resolveTexturePath(name) {
         if (!name) return "";
+        // Normaliser les chemins Windows
+        name = name.replace(/\\/g, "/");
+        // évite les chemins vides du type ".jpg" ou "output/posters/.jpg"
+        if (name === ".jpg" || name.endsWith("/.jpg")) return "";
+        // chemins déjà complets
+        if (name.startsWith("output/posters/")) return "../" + name;
         if (name.startsWith("output/") || name.startsWith("web/")) return "../" + name;
         if (name.includes("/")) return "../" + name;
+        // fallback: posters dans output/posters
         return "../output/posters/" + name;
       }
 
@@ -161,28 +211,39 @@
       const spriteGroup = new THREE.Group();
       const fallbackGeometry = new THREE.SphereGeometry(Math.max(1.2, range * 0.01), 16, 16);
       const fallbackMaterial = new THREE.MeshStandardMaterial({ color: 0xf4c24d });
+      const spriteSize = Math.max(6, range * 0.06);
+
+      function addFallbackNode(node) {
+        const sphere = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
+        sphere.position.set(node.x, node.y, node.z);
+        spriteGroup.add(sphere);
+      }
 
       for (const n of graph.nodes) {
         const texPath = resolveTexturePath(n.texture);
         if (texPath) {
-          const tex = textureLoader.load(
+          const sprite = new THREE.Sprite(
+            new THREE.SpriteMaterial({ transparent: true })
+          );
+          sprite.position.set(n.x, n.y, n.z);
+          sprite.scale.set(spriteSize, spriteSize, 1);
+          spriteGroup.add(sprite);
+
+          textureLoader.load(
             texPath,
-            undefined,
+            (tex) => {
+              sprite.material.map = tex;
+              sprite.material.needsUpdate = true;
+            },
             undefined,
             () => {
-              // fallback if texture fails
+              spriteGroup.remove(sprite);
+              sprite.material.dispose();
+              addFallbackNode(n);
             }
           );
-          const spriteMat = new THREE.SpriteMaterial({ map: tex, transparent: true });
-          const sprite = new THREE.Sprite(spriteMat);
-          sprite.position.set(n.x, n.y, n.z);
-          const size = Math.max(6, range * 0.06);
-          sprite.scale.set(size, size, 1);
-          spriteGroup.add(sprite);
         } else {
-          const sphere = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
-          sphere.position.set(n.x, n.y, n.z);
-          spriteGroup.add(sphere);
+          addFallbackNode(n);
         }
       }
       scene.add(spriteGroup);

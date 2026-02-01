@@ -58,8 +58,8 @@ def calculer_similarite_genres(film1, film2):
     Calcule la similarité basée sur les genres communs
     Retourne un score entre 0 et 1
     """
-    genres1 = set(film1.get("genres", []))
-    genres2 = set(film2.get("genres", []))
+    genres1 = set(film1.get("genres") or [])
+    genres2 = set(film2.get("genres") or [])
     
     if not genres1 or not genres2:
         return 0.0

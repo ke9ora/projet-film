@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recommandations â€” FilmGraph</title>
+  <style>
+    :root {
+      --bg-1: #0b0f14;
+      --bg-2: #101722;
+      --fg: #e9eef7;
+      --muted: #9fb0c7;
+      --accent: #f4c24d;
+      --card: rgba(10, 14, 20, 0.7);
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      background: radial-gradient(1200px 800px at 15% 20%, #141b29, var(--bg-1));
+      color: var(--fg);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+    header {
+      position: sticky;
+      top: 8px;
+      z-index: 11;
+      margin: 8px 12px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: rgba(10, 14, 20, 0.7);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(6px);
+      font-size: 12px;
+    }
+    header .brand {
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    header nav {
+      display: flex;
+      gap: 8px;
+    }
+    header a {
+      color: var(--fg);
+      text-decoration: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+    }
+    header a.active {
+      border-color: rgba(244, 194, 77, 0.5);
+      color: var(--accent);
+    }
+    main {
+      display: grid;
+      grid-template-columns: minmax(260px, 360px) 1fr;
+      gap: 16px;
+      padding: 12px;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    }
+    h1 {
+      font-size: 16px;
+      margin: 0 0 8px 0;
+    }
+    p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin: 6px 0;
+    }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      background: rgba(5, 8, 12, 0.8);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 12px;
+    }
+    button {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(244, 194, 77, 0.5);
+      background: rgba(244, 194, 77, 0.12);
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover {
+      background: rgba(244, 194, 77, 0.2);
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .ghost {
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--fg);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .status {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: pre-wrap;
+    }
+    .options {
+      display: grid;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      margin: 8px 0 4px 0;
+    }
+    .options input[type="number"] {
+      width: 90px;
+      margin-left: 6px;
+      background: rgba(5, 8, 12, 0.8);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 6px;
+    }
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .results {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: rgba(8, 12, 18, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+    .poster {
+      width: 56px;
+      height: 84px;
+      border-radius: 6px;
+      background: #111820;
+      border: 1px solid rgba(255,255,255,0.08);
+      background-size: cover;
+      background-position: center;
+    }
+    .meta h3 {
+      margin: 0 0 4px 0;
+      font-size: 13px;
+    }
+    .meta .small {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 2px 0;
+    }
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">FilmGraph</div>
+    <nav>
+      <a href="index.html">Graphe 3D</a>
+      <a class="active" href="reco.html">Recommandations</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h1>Mes films connus</h1>
+      <p>Un film par ligne. Exemples : Blade Runner, Star Wars: Episode III, Alien: Covenant.</p>
+      <textarea id="knownList" placeholder="Blade Runner&#10;Alien: Covenant&#10;I, Robot"></textarea>
+      <p>Options : enrichissement automatique et seuil.</p>
+      <div class="options">
+        <label><input type="checkbox" id="optEnrichir" checked> Enrichir la base</label>
+        <label>Max films / critère <input type="number" id="optMaxFilms" min="1" max="25" value="12"></label>
+        <label>Seuil <input type="number" id="optSeuil" step="0.01" min="0" max="1" value="0.03"></label>
+        <label><input type="checkbox" id="optForce"> Re-scraper (ignore cache)</label>
+      </div>
+      <div class="actions">
+        <button id="runBtn">Calculer les recommandations</button>
+        <button id="resetBtn" class="ghost">Tout reset</button>
+      </div>
+      <div class="status" id="status">Chargement des donnéesâ€¦</div>
+    </section>
+
+    <section class="panel">
+      <h1>Recommandations</h1>
+      <div class="results" id="results"></div>
+    </section>
+  </main>
+
+  <script>
+    const statusEl = document.getElementById("status");
+    const resultsEl = document.getElementById("results");
+    const runBtn = document.getElementById("runBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const knownListEl = document.getElementById("knownList");
+
+    let films = [];
+
+    function normalizeTitle(value) {
+      if (!value) return "";
+      return value
+        .toUpperCase()
+        .replace(/[^A-Z0-9]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function getTokens(value) {
+      return new Set(normalizeTitle(value).split(" ").filter(t => t.length > 2));
+    }
+
+    const PLACEHOLDER = "data:image/svg+xml;utf8," +
+      encodeURIComponent(
+        "<svg xmlns='http://www.w3.org/2000/svg' width='112' height='168' viewBox='0 0 112 168'>" +
+        "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
+        "<stop offset='0' stop-color='#1b2432'/>" +
+        "<stop offset='1' stop-color='#0b0f14'/>" +
+        "</linearGradient></defs>" +
+        "<rect width='112' height='168' fill='url(#g)'/>" +
+        "<rect x='8' y='8' width='96' height='152' fill='none' stroke='#2d3b52'/>" +
+        "<text x='56' y='88' text-anchor='middle' fill='#9fb0c7' font-size='10' font-family='Arial'>POSTER</text>" +
+        "<text x='56' y='104' text-anchor='middle' fill='#9fb0c7' font-size='10' font-family='Arial'>INDISPONIBLE</text>" +
+        "</svg>"
+      );
+
+    function resolvePosterPath(name) {
+      if (!name) return "";
+      name = name.replace(/\\/g, "/");
+      if (name === ".jpg" || name.endsWith("/.jpg")) return "";
+      if (name.startsWith("output/posters/")) return "../" + name;
+      if (name.startsWith("output/") || name.startsWith("web/")) return "../" + name;
+      if (name.includes("/")) return "../" + name;
+      return "../output/posters/" + name;
+    }
+
+    function renderResults(reco) {
+      resultsEl.innerHTML = "";
+      if (!reco.length) {
+        resultsEl.innerHTML = "<p>Aucune recommandation disponible.</p>";
+        return;
+      }
+      for (const item of reco) {
+        const posterPath = resolvePosterPath(item.poster || "");
+        const genres = Array.isArray(item.genres) ? item.genres.slice(0, 3).join(", ") : "";
+        const year = item.annee || "?";
+        const note = item.note || "?";
+
+        const card = document.createElement("div");
+        card.className = "card";
+        const poster = document.createElement("div");
+        poster.className = "poster";
+        const finalPoster = posterPath || PLACEHOLDER;
+        poster.style.backgroundImage = `url(${finalPoster})`;
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        meta.innerHTML = `
+          <h3>${item.titre || "Inconnu"} (${year})</h3>
+          <div class="small">Score: ${item.score.toFixed(4)}</div>
+          <div class="small">IMDb: ${note} â€¢ Genres: ${genres || "?"}</div>
+        `;
+        card.appendChild(poster);
+        card.appendChild(meta);
+        resultsEl.appendChild(card);
+      }
+    }
+
+    async function loadData() {
+      try {
+        statusEl.textContent = "Colle ta liste, puis clique sur Calculer. Le scraping peut prendre un moment.";
+      } catch (err) {
+        statusEl.textContent = "Erreur: " + err.message;
+      }
+    }
+
+    runBtn.addEventListener("click", () => {
+      const knownTitles = knownListEl.value.split("\n").map(v => v.trim()).filter(Boolean);
+      if (!knownTitles.length) {
+        statusEl.textContent = "Ajoute au moins un film connu.";
+        return;
+      }
+      statusEl.textContent = "Calcul en cours (scraping + graphe + reco)...";
+      runBtn.disabled = true;
+      const enrichir = document.getElementById("optEnrichir").checked;
+      const maxFilms = parseInt(document.getElementById("optMaxFilms").value, 10) || 12;
+      const seuil = parseFloat(document.getElementById("optSeuil").value);
+      const force = document.getElementById("optForce").checked;
+
+      fetch("/api/reco", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          films: knownTitles,
+          enrichir: enrichir,
+          max_films: maxFilms,
+          seuil: Number.isFinite(seuil) ? seuil : 0.03,
+          force: force,
+          write_list: true
+        })
+      })
+        .then(async res => {
+          const text = await res.text();
+          try {
+            return JSON.parse(text);
+          } catch (e) {
+            throw new Error("Réponse non-JSON: " + text.slice(0, 200));
+          }
+        })
+        .then(data => {
+          if (!data.ok) {
+            statusEl.textContent = "Erreur: " + (data.error || "inconnue");
+            return;
+          }
+          statusEl.textContent = `Films: ${data.films_count} | Aretes: ${data.edges_filtered} | Recos: ${data.recommandations.length} (duree ${data.duration_sec}s)`;
+          renderResults(data.recommandations || []);
+        })
+        .catch(err => {
+          statusEl.textContent = "Erreur: " + err.message;
+        })
+        .finally(() => {
+          runBtn.disabled = false;
+        });
+    });
+
+    resetBtn.addEventListener("click", () => {
+      const includePosters = confirm("Supprimer aussi les posters telecharges ?");
+      statusEl.textContent = "Reset en cours...";
+      fetch("/api/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ include_posters: includePosters })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (!data.ok) {
+            statusEl.textContent = "Erreur reset.";
+            return;
+          }
+          resultsEl.innerHTML = "";
+          const deleted = Array.isArray(data.deleted) ? data.deleted.length : 0;
+          statusEl.textContent = `Reset termine. Fichiers supprimes: ${deleted}. Relance un calcul.`;
+        })
+        .catch(err => {
+          statusEl.textContent = "Erreur: " + err.message;
+        });
+    });
+
+    loadData();
+  </script>
+</body>
+</html>
