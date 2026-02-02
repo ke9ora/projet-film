@@ -32,29 +32,24 @@ def identifier_films_connus(films_data, titres_connus):
     Retourne un set d'indices des films connus
     """
     indices_connus = set()
-    
+
+    def normalize(value):
+        return " ".join((value or "").upper().split())
+
+    titres_norm = {normalize(t) for t in titres_connus}
+
     for i, film in enumerate(films_data):
         if not isinstance(film, dict):
             continue
-        titre = film.get("titre", "").upper()
-        titre_original = film.get("titre_original", "").upper()
-        
-        # Correspondance exacte
-        if titre in titres_connus or titre_original in titres_connus:
+        titre = normalize(film.get("titre", ""))
+        titre_original = normalize(film.get("titre_original", ""))
+
+        # Correspondance exacte uniquement (plus strict)
+        if titre in titres_norm or titre_original in titres_norm:
             indices_connus.add(i)
-            continue
-        
-        # Correspondance flexible : vérifier si un titre connu contient des mots-clés du film
-        for titre_connu in titres_connus:
-            # Extraire les mots-clés importants (ignorer les mots courts)
-            mots_film = {m for m in titre.split() if len(m) > 2}
-            mots_connus = {m for m in titre_connu.split() if len(m) > 2}
-            # Si au moins 2 mots en commun, considérer comme match
-            if len(mots_film.intersection(mots_connus)) >= 2:
-                indices_connus.add(i)
-                break
-    
+
     return indices_connus
+
 
 
 def calculer_scores_recommandation(films_data, aretes, indices_connus):

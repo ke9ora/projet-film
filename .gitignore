@@ -1,4 +1,4 @@
-# Fichiers générés
+# Fichiers gï¿½nï¿½rï¿½s
 output/
 
 # Fichiers sensibles (clÃ©s API, tokens)
@@ -28,3 +28,4 @@ venv/
 Thumbs.db
 .env.example
 
+consignes.txt

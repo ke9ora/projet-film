@@ -1,264 +1,282 @@
 {
   "films": [
     {
-      "titre": "The Godfather",
-      "titre_original": "The Godfather",
-      "imdb_id": "0068646",
+      "titre": "WALL·E",
+      "titre_original": "WALL·E",
+      "imdb_id": "0910970",
       "genres": [
-        "Crime",
-        "Drama"
+        "Animation",
+        "Adventure",
+        "Family"
       ],
-      "annee": 1972,
-      "acteurs": [
-        "Marlon Brando",
-        "Al Pacino",
-        "James Caan"
-      ],
-      "realisateur": "Francis Ford Coppola",
-      "note": 9.2,
-      "poster": "output\\posters\\The_Godfather.jpg"
-    },
-    {
-      "titre": "The Black Godfather",
-      "titre_original": "The Black Godfather",
-      "imdb_id": "10289996",
-      "genres": [],
-      "annee": 2019,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\The_Black_Godfather.jpg"
-    },
-    {
-      "titre": "The Rockford Files: Godfather Knows Best",
-      "titre_original": "The Rockford Files: Godfather Knows Best",
-      "imdb_id": "0117503",
-      "genres": [],
-      "annee": 1996,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": null
-    },
-    {
-      "titre": "Herschell Gordon Lewis: The Godfather of Gore",
-      "titre_original": "Herschell Gordon Lewis: The Godfather of Gore",
-      "imdb_id": "1683431",
-      "genres": [],
-      "annee": 2010,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\Herschell_Gordon_Lewis__The_Godfather_of_Gore.jpg"
-    },
-    {
-      "titre": "The Godfather and the Mob",
-      "titre_original": "The Godfather and the Mob",
-      "imdb_id": "0819367",
-      "genres": [],
-      "annee": 2006,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": null
-    },
-    {
-      "titre": "The Real Godfather",
-      "titre_original": "The Real Godfather",
-      "imdb_id": "2363200",
-      "genres": [],
-      "annee": 2007,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": null
-    },
-    {
-      "titre": "The Godfather of Green Bay",
-      "titre_original": "The Godfather of Green Bay",
-      "imdb_id": "0385727",
-      "genres": [],
-      "annee": 2005,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": null
-    },
-    {
-      "titre": "Retreat of the Godfather",
-      "titre_original": "Retreat of the Godfather",
-      "imdb_id": "0101643",
-      "genres": [],
-      "annee": 1991,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\Retreat_of_the_Godfather.jpg"
-    },
-    {
-      "titre": "The Godfather: Behind the Scenes",
-      "titre_original": "The Godfather: Behind the Scenes",
-      "imdb_id": "1113794",
-      "genres": [],
-      "annee": 1971,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": null
-    },
-    {
-      "titre": "The Godfather of Disco",
-      "titre_original": "The Godfather of Disco",
-      "imdb_id": "1067108",
-      "genres": [],
-      "annee": 2007,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\The_Godfather_of_Disco.jpg"
-    },
-    {
-      "titre": "The Godfather Legacy",
-      "titre_original": "The Godfather Legacy",
-      "imdb_id": "2311160",
-      "genres": [],
-      "annee": 2012,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\The_Godfather_Legacy.jpg"
-    },
-    {
-      "titre": "Emulsional Rescue: Revealing 'The Godfather'",
-      "titre_original": "Emulsional Rescue: Revealing 'The Godfather'",
-      "imdb_id": "5277870",
-      "genres": [],
       "annee": 2008,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": null
+      "acteurs": [
+        "Ben Burtt",
+        "Elissa Knight",
+        "Jeff Garlin"
+      ],
+      "realisateur": "Andrew Stanton",
+      "note": 8.4,
+      "poster": "output\\posters\\WALL·E.jpg"
     },
     {
-      "titre": "Paul Mooney: The Godfather of Comedy",
-      "titre_original": "Paul Mooney: The Godfather of Comedy",
-      "imdb_id": "2221825",
-      "genres": [],
-      "annee": 2012,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\Paul_Mooney__The_Godfather_of_Comedy.jpg"
+      "titre": "Big Hero 6",
+      "titre_original": "Big Hero 6",
+      "imdb_id": "2245084",
+      "genres": [
+        "Animation",
+        "Action",
+        "Adventure"
+      ],
+      "annee": 2014,
+      "acteurs": [
+        "Ryan Potter",
+        "Scott Adsit",
+        "Jamie Chung"
+      ],
+      "realisateur": "Don Hall, Chris Williams",
+      "note": 7.8,
+      "poster": "output\\posters\\Big_Hero_6.jpg"
     },
     {
-      "titre": "The Godfather Part II",
-      "titre_original": "The Godfather Part II",
-      "imdb_id": "0071562",
-      "genres": [],
-      "annee": 1974,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\The_Godfather_Part_II.jpg"
+      "titre": "How to Train Your Dragon",
+      "titre_original": "How to Train Your Dragon",
+      "imdb_id": "0892769",
+      "genres": [
+        "Animation",
+        "Action",
+        "Adventure"
+      ],
+      "annee": 2010,
+      "acteurs": [
+        "Jay Baruchel",
+        "Gerard Butler",
+        "Christopher Mintz-Plasse"
+      ],
+      "realisateur": "Dean DeBlois, Chris Sanders",
+      "note": 8.1,
+      "poster": "output\\posters\\How_to_Train_Your_Dragon.jpg"
     },
     {
-      "titre": "The Godfather Buck",
-      "titre_original": "The Godfather Buck",
-      "imdb_id": "13593766",
+      "titre": "The Incredibles",
+      "titre_original": "The Incredibles",
+      "imdb_id": "0317705",
+      "genres": [
+        "Animation",
+        "Action",
+        "Adventure"
+      ],
+      "annee": 2004,
+      "acteurs": [
+        "Craig T. Nelson",
+        "Samuel L. Jackson",
+        "Holly Hunter"
+      ],
+      "realisateur": "Brad Bird",
+      "note": 8.0,
+      "poster": "output\\posters\\The_Incredibles.jpg"
+    },
+    {
+      "titre": "Up",
+      "titre_original": "Up",
+      "imdb_id": "1049413",
+      "genres": [
+        "Animation",
+        "Adventure",
+        "Comedy"
+      ],
+      "annee": 2009,
+      "acteurs": [
+        "Edward Asner",
+        "Jordan Nagai",
+        "John Ratzenberger"
+      ],
+      "realisateur": "Pete Docter, Bob Peterson",
+      "note": 8.3,
+      "poster": "output\\posters\\Up.jpg"
+    },
+    {
+      "titre": "Spirited Away",
+      "titre_original": "Spirited Away",
+      "imdb_id": "0245429",
+      "genres": [
+        "Animation",
+        "Adventure",
+        "Family"
+      ],
+      "annee": 2001,
+      "acteurs": [
+        "Miyu Irino",
+        "Rumi Hiiragi",
+        "Mari Natsuki"
+      ],
+      "realisateur": "Hayao Miyazaki",
+      "note": 8.6,
+      "poster": "output\\posters\\Spirited_Away.jpg"
+    },
+    {
+      "titre": "My Neighbor Totoro",
+      "titre_original": "My Neighbor Totoro",
+      "imdb_id": "0096283",
+      "genres": [
+        "Animation",
+        "Adventure",
+        "Comedy"
+      ],
+      "annee": 1988,
+      "acteurs": [
+        "Hitoshi Takagi",
+        "Noriko Hidaka",
+        "Chika Sakamoto"
+      ],
+      "realisateur": "Hayao Miyazaki",
+      "note": 8.1,
+      "poster": "output\\posters\\My_Neighbor_Totoro.jpg"
+    },
+    {
+      "titre": "The Iron Giant",
+      "titre_original": "The Iron Giant",
+      "imdb_id": "0129167",
+      "genres": [
+        "Animation",
+        "Action",
+        "Adventure"
+      ],
+      "annee": 1999,
+      "acteurs": [
+        "Eli Marienthal",
+        "Harry Connick Jr.",
+        "Jennifer Aniston"
+      ],
+      "realisateur": "Brad Bird",
+      "note": 8.1,
+      "poster": "output\\posters\\The_Iron_Giant.jpg"
+    },
+    {
+      "titre": "Coraline",
+      "titre_original": "Coraline",
+      "imdb_id": "0327597",
+      "genres": [
+        "Animation",
+        "Drama",
+        "Family"
+      ],
+      "annee": 2009,
+      "acteurs": [
+        "Dakota Fanning",
+        "Teri Hatcher",
+        "John Hodgman"
+      ],
+      "realisateur": "Henry Selick",
+      "note": 7.8,
+      "poster": "output\\posters\\Coraline.jpg"
+    },
+    {
+      "titre": "Fantastic Mr. Fox",
+      "titre_original": "Fantastic Mr. Fox",
+      "imdb_id": "0432283",
+      "genres": [
+        "Animation",
+        "Adventure",
+        "Comedy"
+      ],
+      "annee": 2009,
+      "acteurs": [
+        "George Clooney",
+        "Meryl Streep",
+        "Bill Murray"
+      ],
+      "realisateur": "Wes Anderson",
+      "note": 7.9,
+      "poster": "output\\posters\\Fantastic_Mr._Fox.jpg"
+    },
+    {
+      "titre": "Spirited Away: Live on Stage",
+      "titre_original": "Spirited Away: Live on Stage",
+      "imdb_id": "27003039",
       "genres": [],
       "annee": 2022,
       "acteurs": [],
       "realisateur": null,
       "note": null,
-      "poster": null
+      "poster": "output\\posters\\Spirited_Away__Live_on_Stage.jpg"
     },
     {
-      "titre": "The Godfather Trilogy: 1901-1980",
-      "titre_original": "The Godfather Trilogy: 1901-1980",
-      "imdb_id": "0150742",
+      "titre": "How to Train Your Dragon",
+      "titre_original": "How to Train Your Dragon",
+      "imdb_id": "26743210",
       "genres": [],
-      "annee": 1992,
+      "annee": 2025,
       "acteurs": [],
       "realisateur": null,
       "note": null,
-      "poster": "output\\posters\\The_Godfather_Trilogy__1901-1980.jpg"
+      "poster": "output\\posters\\How_to_Train_Your_Dragon.jpg"
     },
     {
-      "titre": "The Godfather",
-      "titre_original": "The Godfather",
-      "imdb_id": "0364378",
+      "titre": "The Incredibles",
+      "titre_original": "The Incredibles",
+      "imdb_id": "32832609",
       "genres": [],
-      "annee": 1911,
+      "annee": 2024,
       "acteurs": [],
       "realisateur": null,
       "note": null,
-      "poster": "output\\posters\\The_Godfather.jpg"
+      "poster": "output\\posters\\The_Incredibles.jpg"
     },
     {
-      "titre": "The Black Godfather",
-      "titre_original": "The Black Godfather",
-      "imdb_id": "0071225",
+      "titre": "How to Train Your Dragon 2",
+      "titre_original": "How to Train Your Dragon 2",
+      "imdb_id": "36416299",
       "genres": [],
-      "annee": 1974,
+      "annee": 2027,
       "acteurs": [],
       "realisateur": null,
       "note": null,
-      "poster": "output\\posters\\The_Black_Godfather.jpg"
+      "poster": "output\\posters\\How_to_Train_Your_Dragon_2.jpg"
     },
     {
-      "titre": "The Last Godfather",
-      "titre_original": "The Last Godfather",
-      "imdb_id": "1584131",
+      "titre": "How to Train Your Dragon 2",
+      "titre_original": "How to Train Your Dragon 2",
+      "imdb_id": "1646971",
       "genres": [],
-      "annee": 2010,
+      "annee": 2014,
       "acteurs": [],
       "realisateur": null,
       "note": null,
-      "poster": "output\\posters\\The_Last_Godfather.jpg"
+      "poster": "output\\posters\\How_to_Train_Your_Dragon_2.jpg"
     },
     {
-      "titre": "The Godfather Family: A Look Inside",
-      "titre_original": "The Godfather Family: A Look Inside",
-      "imdb_id": "0101961",
+      "titre": "How to Train Your Dragon: The Hidden World",
+      "titre_original": "How to Train Your Dragon: The Hidden World",
+      "imdb_id": "2386490",
       "genres": [],
-      "annee": 1990,
+      "annee": 2019,
       "acteurs": [],
       "realisateur": null,
       "note": null,
-      "poster": null
+      "poster": "output\\posters\\How_to_Train_Your_Dragon__The_Hidden_World.jpg"
     },
     {
-      "titre": "Miracles: The Canton Godfather",
-      "titre_original": "Miracles: The Canton Godfather",
-      "imdb_id": "0098019",
+      "titre": "Crazy Kwai Boo: Sanxingdui Spirited Away",
+      "titre_original": "Crazy Kwai Boo: Sanxingdui Spirited Away",
+      "imdb_id": "28443557",
       "genres": [],
-      "annee": 1989,
+      "annee": 2022,
       "acteurs": [],
       "realisateur": null,
       "note": null,
-      "poster": "output\\posters\\Miracles__The_Canton_Godfather.jpg"
+      "poster": "output\\posters\\Crazy_Kwai_Boo__Sanxingdui_Spirited_Away.jpg"
     },
     {
-      "titre": "Godfather: The Legend Continues",
-      "titre_original": "Godfather: The Legend Continues",
-      "imdb_id": "1281838",
+      "titre": "Spirited Away: Live on Stage",
+      "titre_original": "Spirited Away: Live on Stage",
+      "imdb_id": "26678995",
       "genres": [],
-      "annee": 2007,
+      "annee": 2022,
       "acteurs": [],
       "realisateur": null,
       "note": null,
-      "poster": null
-    },
-    {
-      "titre": "The Godfather Part III",
-      "titre_original": "The Godfather Part III",
-      "imdb_id": "0099674",
-      "genres": [],
-      "annee": 1990,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\The_Godfather_Part_III.jpg"
+      "poster": "output\\posters\\Spirited_Away__Live_on_Stage.jpg"
     }
   ]
 }

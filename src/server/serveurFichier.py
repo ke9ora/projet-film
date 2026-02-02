@@ -214,7 +214,7 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
                 films_data,
                 aretes_filtrees,
                 titres_connus=titres_connus,
-                top_n=10
+                top_n=40
             )
 
             reco_payload = []

@@ -56,6 +56,26 @@ FR_EN_TITRES = {
     "indiana jones et les aventuriers de l'arche perdue": "raiders of the lost ark",
 }
 
+NON_MOVIE_KEYWORDS = [
+    "making of",
+    "behind the scenes",
+    "featurette",
+    "bonus",
+    "deleted scene",
+    "deleted scenes",
+    "trailer",
+    "teaser",
+    "promo",
+    "special",
+    "recap",
+    "short",
+    "episode",
+    "tv",
+    "clip",
+    "interview",
+    "documentary",
+]
+
 def _normalize_title_key(value):
     if not value:
         return ""
@@ -73,6 +93,15 @@ def map_title_fr_en(titre):
         return titre
     key = _normalize_title_key(titre)
     return _FR_EN_TITRES_NORM.get(key, titre)
+
+def _is_non_movie_title(title):
+    if not title:
+        return False
+    norm = _normalize_title_key(title)
+    for kw in NON_MOVIE_KEYWORDS:
+        if kw in norm:
+            return True
+    return False
 
 def _fetch_omdb_by_title(titre_film):
     if not titre_film:
@@ -211,6 +240,14 @@ def scraper_film_omdb(titre_film, imdb_id=None):
         
         if not data or data.get("Response") != "True":
             print(f"✖ Film '{titre_film}' non trouvé via OMDb")
+            return None
+
+        if data.get("Type") and data.get("Type") != "movie":
+            print(f"- Ignore (type={data.get('Type')}) : {data.get('Title') or titre_film}")
+            return None
+
+        if _is_non_movie_title(data.get("Title") or titre_film):
+            print(f"- Ignore (non-film) : {data.get('Title') or titre_film}")
             return None
         
         titre = data.get("Title", titre_film)
@@ -354,6 +391,15 @@ def scraper_film(titre_film, ia, imdb_id=None):
         )
         if not titre:
             titre = titre_film
+
+        kind = get_movie_value(['kind'], default=None)
+        if kind and kind != "movie":
+            print(f"- Ignore (type={kind}) : {titre}")
+            return None
+
+        if _is_non_movie_title(titre):
+            print(f"- Ignore (non-film) : {titre}")
+            return None
         
         imdb_id = str(movie_id).zfill(7)  # Format: 0133093
         

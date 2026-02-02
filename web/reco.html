@@ -3,25 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Recommandations â€” FilmGraph</title>
+  <title>Recommandations - FilmGraph</title>
   <style>
+    @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap");
     :root {
       --bg-1: #0b0f14;
-      --bg-2: #101722;
-      --fg: #e9eef7;
-      --muted: #9fb0c7;
-      --accent: #f4c24d;
-      --card: rgba(10, 14, 20, 0.7);
+      --bg-2: #0f1724;
+      --bg-3: #121a2b;
+      --fg: #eef3fb;
+      --muted: #9aa9bd;
+      --accent: #f2b84b;
+      --accent-strong: #ffcc66;
+      --card: rgba(14, 20, 30, 0.85);
       --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
     }
     html, body {
       margin: 0;
       padding: 0;
       width: 100%;
       min-height: 100%;
-      background: radial-gradient(1200px 800px at 15% 20%, #141b29, var(--bg-1));
+      background:
+        radial-gradient(1100px 700px at 12% 18%, #1b2434, var(--bg-1)),
+        radial-gradient(900px 600px at 80% 10%, #1a2b3f, transparent),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
       color: var(--fg);
-      font-family: "Segoe UI", Arial, sans-serif;
+      font-family: "DM Sans", "Segoe UI", Arial, sans-serif;
     }
     header {
       position: sticky;
@@ -33,15 +40,17 @@
       justify-content: space-between;
       gap: 12px;
       padding: 8px 12px;
-      border-radius: 10px;
-      background: rgba(10, 14, 20, 0.7);
+      border-radius: 14px;
+      background: rgba(12, 18, 26, 0.85);
       border: 1px solid var(--border);
       backdrop-filter: blur(6px);
       font-size: 12px;
+      box-shadow: var(--shadow);
     }
     header .brand {
-      font-weight: 600;
-      letter-spacing: 0.3px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      font-family: "Space Grotesk", "DM Sans", sans-serif;
     }
     header nav {
       display: flex;
@@ -51,30 +60,36 @@
       color: var(--fg);
       text-decoration: none;
       padding: 4px 8px;
-      border-radius: 6px;
+      border-radius: 999px;
       border: 1px solid transparent;
     }
     header a.active {
-      border-color: rgba(244, 194, 77, 0.5);
-      color: var(--accent);
+      border-color: rgba(242, 184, 75, 0.55);
+      color: var(--accent-strong);
+      background: rgba(242, 184, 75, 0.08);
     }
     main {
       display: grid;
       grid-template-columns: minmax(260px, 360px) 1fr;
-      gap: 16px;
-      padding: 12px;
+      gap: 18px;
+      padding: 14px;
+    }
+    .stack {
+      display: grid;
+      gap: 12px;
     }
     .panel {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px;
+      border-radius: 16px;
+      padding: 14px;
       backdrop-filter: blur(6px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      box-shadow: var(--shadow);
     }
     h1 {
-      font-size: 16px;
+      font-size: 17px;
       margin: 0 0 8px 0;
+      font-family: "Space Grotesk", "DM Sans", sans-serif;
     }
     p {
       color: var(--muted);
@@ -85,27 +100,28 @@
     textarea {
       width: 100%;
       min-height: 200px;
-      background: rgba(5, 8, 12, 0.8);
+      background: rgba(7, 12, 18, 0.95);
       color: var(--fg);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px;
+      border-radius: 10px;
+      padding: 10px;
       resize: vertical;
       font-family: inherit;
       font-size: 12px;
     }
     button {
       margin-top: 8px;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(244, 194, 77, 0.5);
-      background: rgba(244, 194, 77, 0.12);
-      color: var(--accent);
-      font-weight: 600;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(242, 184, 75, 0.55);
+      background: linear-gradient(135deg, rgba(242, 184, 75, 0.2), rgba(242, 184, 75, 0.05));
+      color: var(--accent-strong);
+      font-weight: 700;
+      letter-spacing: 0.2px;
       cursor: pointer;
     }
     button:hover {
-      background: rgba(244, 194, 77, 0.2);
+      background: linear-gradient(135deg, rgba(242, 184, 75, 0.35), rgba(242, 184, 75, 0.12));
     }
     .actions {
       display: flex;
@@ -114,9 +130,9 @@
       margin-top: 8px;
     }
     .ghost {
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.16);
       color: var(--fg);
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.03);
     }
     .status {
       margin-top: 8px;
@@ -126,7 +142,7 @@
     }
     .options {
       display: grid;
-      gap: 6px;
+      gap: 8px;
       font-size: 12px;
       color: var(--muted);
       margin: 8px 0 4px 0;
@@ -134,7 +150,7 @@
     .options input[type="number"] {
       width: 90px;
       margin-left: 6px;
-      background: rgba(5, 8, 12, 0.8);
+      background: rgba(7, 12, 18, 0.95);
       color: var(--fg);
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -147,22 +163,26 @@
     }
     .results {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 12px;
     }
     .card {
-      background: rgba(8, 12, 18, 0.8);
+      background: rgba(9, 14, 22, 0.85);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 14px;
       padding: 10px;
       display: grid;
-      grid-template-columns: 56px 1fr;
-      gap: 10px;
-      align-items: center;
+      gap: 8px;
+      align-items: start;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(242, 184, 75, 0.35);
     }
     .poster {
-      width: 56px;
-      height: 84px;
+      width: 100%;
+      height: 180px;
       border-radius: 6px;
       background: #111820;
       border: 1px solid rgba(255,255,255,0.08);
@@ -170,7 +190,7 @@
       background-position: center;
     }
     .meta h3 {
-      margin: 0 0 4px 0;
+      margin: 2px 0 4px 0;
       font-size: 13px;
     }
     .meta .small {
@@ -190,6 +210,7 @@
     <div class="brand">FilmGraph</div>
     <nav>
       <a href="index.html">Graphe 3D</a>
+      <a href="stats.html">Stats</a>
       <a class="active" href="reco.html">Recommandations</a>
     </nav>
   </header>
@@ -202,7 +223,7 @@
       <p>Options : enrichissement automatique et seuil.</p>
       <div class="options">
         <label><input type="checkbox" id="optEnrichir" checked> Enrichir la base</label>
-        <label>Max films / critère <input type="number" id="optMaxFilms" min="1" max="25" value="12"></label>
+        <label>Max films / critere <input type="number" id="optMaxFilms" min="1" max="25" value="12"></label>
         <label>Seuil <input type="number" id="optSeuil" step="0.01" min="0" max="1" value="0.03"></label>
         <label><input type="checkbox" id="optForce"> Re-scraper (ignore cache)</label>
       </div>
@@ -210,7 +231,7 @@
         <button id="runBtn">Calculer les recommandations</button>
         <button id="resetBtn" class="ghost">Tout reset</button>
       </div>
-      <div class="status" id="status">Chargement des donnéesâ€¦</div>
+      <div class="status" id="status">Chargement des donnees...</div>
     </section>
 
     <section class="panel">
@@ -227,6 +248,7 @@
     const knownListEl = document.getElementById("knownList");
 
     let films = [];
+    const STORAGE_KEY = "filmgraph_reco_state_v1";
 
     function normalizeTitle(value) {
       if (!value) return "";
@@ -288,7 +310,7 @@
         meta.innerHTML = `
           <h3>${item.titre || "Inconnu"} (${year})</h3>
           <div class="small">Score: ${item.score.toFixed(4)}</div>
-          <div class="small">IMDb: ${note} â€¢ Genres: ${genres || "?"}</div>
+          <div class="small">IMDb: ${note} - Genres: ${genres || "?"}</div>
         `;
         card.appendChild(poster);
         card.appendChild(meta);
@@ -296,9 +318,63 @@
       }
     }
 
+    function saveState(payload, knownTitles) {
+      try {
+        const state = {
+          knownTitles: knownTitles || [],
+          options: {
+            enrichir: document.getElementById("optEnrichir").checked,
+            maxFilms: parseInt(document.getElementById("optMaxFilms").value, 10) || 12,
+            seuil: parseFloat(document.getElementById("optSeuil").value),
+            force: document.getElementById("optForce").checked
+          },
+          payload: payload || null,
+          savedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        // ignore storage errors
+      }
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (e) {
+        return null;
+      }
+    }
+
+
     async function loadData() {
       try {
         statusEl.textContent = "Colle ta liste, puis clique sur Calculer. Le scraping peut prendre un moment.";
+        const cached = loadState();
+        if (cached) {
+          if (Array.isArray(cached.knownTitles)) {
+            knownListEl.value = cached.knownTitles.join("\n");
+          }
+          if (cached.options) {
+            if (typeof cached.options.enrichir === "boolean") {
+              document.getElementById("optEnrichir").checked = cached.options.enrichir;
+            }
+            if (Number.isFinite(cached.options.maxFilms)) {
+              document.getElementById("optMaxFilms").value = cached.options.maxFilms;
+            }
+            if (Number.isFinite(cached.options.seuil)) {
+              document.getElementById("optSeuil").value = cached.options.seuil;
+            }
+            if (typeof cached.options.force === "boolean") {
+              document.getElementById("optForce").checked = cached.options.force;
+            }
+          }
+          if (cached.payload && cached.payload.ok) {
+            statusEl.textContent = `Films: ${cached.payload.films_count} | Aretes: ${cached.payload.edges_filtered} | Recos: ${cached.payload.recommandations.length} (duree ${cached.payload.duration_sec}s)`;
+            renderResults(cached.payload.recommandations || []);
+          }
+        }
       } catch (err) {
         statusEl.textContent = "Erreur: " + err.message;
       }
@@ -334,7 +410,7 @@
           try {
             return JSON.parse(text);
           } catch (e) {
-            throw new Error("Réponse non-JSON: " + text.slice(0, 200));
+            throw new Error("Reponse non-JSON: " + text.slice(0, 200));
           }
         })
         .then(data => {
@@ -344,6 +420,7 @@
           }
           statusEl.textContent = `Films: ${data.films_count} | Aretes: ${data.edges_filtered} | Recos: ${data.recommandations.length} (duree ${data.duration_sec}s)`;
           renderResults(data.recommandations || []);
+          saveState(data, knownTitles);
         })
         .catch(err => {
           statusEl.textContent = "Erreur: " + err.message;
@@ -370,6 +447,11 @@
           resultsEl.innerHTML = "";
           const deleted = Array.isArray(data.deleted) ? data.deleted.length : 0;
           statusEl.textContent = `Reset termine. Fichiers supprimes: ${deleted}. Relance un calcul.`;
+          try {
+            localStorage.removeItem(STORAGE_KEY);
+          } catch (e) {
+            // ignore
+          }
         })
         .catch(err => {
           statusEl.textContent = "Erreur: " + err.message;

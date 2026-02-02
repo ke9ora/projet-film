@@ -213,14 +213,23 @@ def enrichir_base_films(films_data, max_films_par_critere=3, cache_file="films_d
         try:
             movie = ia.get_movie(int(movie_id))
             titre = movie.get('title', f'Film {movie_id}')
-            
-            # Utiliser la fonction de scraping existante mais adaptée
+
+            kind = movie.get('kind') if hasattr(movie, "get") else getattr(movie, "kind", None)
+            if kind and kind != "movie":
+                print(f"  - Ignore (type={kind}) : {titre}")
+                continue
+
+            if scraperFilms._is_non_movie_title(titre):
+                print(f"  - Ignore (non-film) : {titre}")
+                continue
+
+            # Utiliser la fonction de scraping existante mais adaptee
             film_data = scraper_film_par_id(ia, movie_id, movie)
             if film_data:
                 nouveaux_films.append(film_data)
                 films_data.append(film_data)
         except Exception as e:
-            print(f"  ✖ Erreur lors du scraping de {movie_id}: {e}")
+            print(f"  - Erreur lors du scraping de {movie_id}: {e}")
     
     # Sauvegarder dans le cache
     if nouveaux_films:
