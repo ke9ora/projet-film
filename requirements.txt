@@ -1,3 +1,4 @@
-cinemagoer
+# Cinemagoer (IMDb) : si parsing échoue, essayer pip install -U git+https://github.com/cinemagoer/cinemagoer.git
+cinemagoer>=2023.5.1
 requests
 networkx

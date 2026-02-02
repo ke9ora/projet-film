@@ -1,0 +1,68 @@
+{
+  "films": [
+    {
+      "titre": "Inception",
+      "titre_original": "Inception",
+      "imdb_id": "1375666",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "annee": 2010,
+      "acteurs": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "realisateur": "Christopher Nolan",
+      "note": 8.8,
+      "poster": "output/posters/Inception.jpg"
+    },
+    {
+      "titre": "Tenet",
+      "titre_original": "Tenet",
+      "imdb_id": "6723592",
+      "genres": [
+        "Action",
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "annee": 2020,
+      "acteurs": [
+        "Juhan Ulfsak",
+        "Jefferson Hall",
+        "Ivo Uukkivi",
+        "Andrew Howard",
+        "John David Washington"
+      ],
+      "realisateur": "Christopher Nolan",
+      "note": 7.3,
+      "poster": "output/posters/Tenet.jpg"
+    },
+    {
+      "titre": "Oppenheimer",
+      "titre_original": "Oppenheimer",
+      "imdb_id": "15398776",
+      "genres": [
+        "Biography",
+        "Drama",
+        "History"
+      ],
+      "annee": 2023,
+      "acteurs": [
+        "Cillian Murphy",
+        "Emily Blunt",
+        "Robert Downey Jr.",
+        "Alden Ehrenreich",
+        "Scott Grimes"
+      ],
+      "realisateur": "Christopher Nolan",
+      "note": 8.2,
+      "poster": "output/posters/Oppenheimer.jpg"
+    }
+  ]
+}

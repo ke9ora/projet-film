@@ -190,6 +190,7 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
 
             updated = _completer_films_manquants(films_data)
 
+            nb_films_saisis = len(films_data)  # avant enrichissement
             if enrichir:
                 films_data = enrichirBaseFilms.enrichir_base_films(
                     films_data,
@@ -214,7 +215,8 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
                 films_data,
                 aretes_filtrees,
                 titres_connus=titres_connus,
-                top_n=40
+                top_n=40,
+                nb_films_saisis=nb_films_saisis,
             )
 
             reco_payload = []

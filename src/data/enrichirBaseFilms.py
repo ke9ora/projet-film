@@ -5,18 +5,57 @@ Utilise Cinemagoer pour trouver des films avec les mêmes acteurs, réalisateurs
 """
 import json
 import os
+import re
 from imdb import Cinemagoer
 from src.data import scraperFilms
+
+
+def normaliser_titre(titre):
+    """
+    Normalise un titre pour comparaison : enlève l'année entre parenthèses en fin de titre,
+    puis majuscules et espaces fusionnés. Ex. "Challengers (2024)" -> "CHALLENGERS".
+    """
+    if not titre or not isinstance(titre, str):
+        return ""
+    t = titre.strip()
+    # Enlever l'année en fin : "Titre (2024)" ou "Titre (I) (2024)"
+    t = re.sub(r"\s*\(\d{4}\)\s*$", "", t)
+    return " ".join(t.upper().split())
+
+
+def titre_deja_present(films_data, film_data):
+    """
+    Retourne True si un film dans films_data a le même titre normalisé que film_data.
+    """
+    if not film_data or not isinstance(film_data, dict):
+        return False
+    ref = normaliser_titre(film_data.get("titre") or film_data.get("titre_original") or "")
+    if not ref:
+        return False
+    for f in films_data:
+        if not isinstance(f, dict):
+            continue
+        if normaliser_titre(f.get("titre") or f.get("titre_original") or "") == ref:
+            return True
+    return False
 
 
 def trouver_films_recommandes(ia, movie_id, limite=10):
     """
     Récupère les recommandations IMDb pour un film (IDs IMDb).
+    Utilise la page principale du titre (pas /reference) pour éviter les 404.
     """
+    ids = []
     try:
         movie = ia.get_movie(int(movie_id), info=['recommendations'])
         recos = movie.get('recommendations', []) or movie.get('recommended', [])
-        ids = []
+        # Fallback : appeler directement la méthode HTTP si le parser n'a rien renvoyé
+        if not recos and hasattr(ia, 'get_movie_recommendations'):
+            try:
+                ret = ia.get_movie_recommendations(int(movie_id))
+                recos = (ret or {}).get('data', {}).get('recommendations', []) or []
+            except Exception:
+                pass
         for rec in recos:
             rec_id = rec.get('movieID') if isinstance(rec, dict) else getattr(rec, 'movieID', None)
             if rec_id:
@@ -46,12 +85,11 @@ def trouver_films_par_acteur(ia, nom_acteur, limite=5):
                 ia.update(personne, ['filmography'])
             except Exception:
                 pass
-        films = personne.get('filmography', {}).get('actor', [])
-        if not films:
-            films = personne.get('filmography', {}).get('actress', [])
+        filmo = personne.get('filmography') or {}
+        films = filmo.get('actor', []) or filmo.get('actress', [])
         if not films:
             for key in ('cast', 'self', 'archive_footage'):
-                films = personne.get('filmography', {}).get(key, [])
+                films = filmo.get(key, [])
                 if films:
                     break
         if not films:
@@ -94,10 +132,11 @@ def trouver_films_par_realisateur(ia, nom_realisateur, limite=5):
                 ia.update(personne, ['filmography'])
             except Exception:
                 pass
-        films = personne.get('filmography', {}).get('director', [])
+        filmo = personne.get('filmography') or {}
+        films = filmo.get('director', []) or filmo.get('directors', [])
         if not films:
             for key in ('assistant_director', 'producer'):
-                films = personne.get('filmography', {}).get(key, [])
+                films = filmo.get(key, [])
                 if films:
                     break
         if not films:
@@ -162,7 +201,7 @@ def enrichir_base_films(films_data, max_films_par_critere=3, cache_file="films_d
     for film in films_data:
         print(f"Recherche de films similaires à '{film.get('titre', 'Inconnu')}'...")
         added_before = len(nouveaux_ids)
-        
+
         # Par réalisateur
         realisateur = film.get("realisateur")
         if realisateur:
@@ -192,18 +231,8 @@ def enrichir_base_films(films_data, max_films_par_critere=3, cache_file="films_d
             if ids:
                 print(f"  ✔ {len([id for id in ids if id not in imdb_ids_existants])} nouveaux films trouvés (recommandations IMDb)")
 
-        # Fallback OMDb: recherche par titre si aucune découverte
-        if len(nouveaux_ids) == added_before:
-            titre = film.get("titre") or film.get("titre_original") or ""
-            ids = scraperFilms.search_omdb_by_title(titre, max_results=max_films_par_critere * 2)
-            for movie_id in ids:
-                if movie_id not in imdb_ids_existants:
-                    nouveaux_ids.add(movie_id)
-            if ids:
-                print(f"  ✔ {len([id for id in ids if id not in imdb_ids_existants])} nouveaux films trouvés (OMDb search)")
-            else:
-                print("  ⚠ Aucun résultat OMDb (search)")
-    
+        # OMDb n'est pas utilisé pour l'enrichissement (uniquement pour les posters).
+
     print(f"\n✔ {len(nouveaux_ids)} nouveaux films identifiés à scraper")
     
     # Scraper les nouveaux films
@@ -226,6 +255,9 @@ def enrichir_base_films(films_data, max_films_par_critere=3, cache_file="films_d
             # Utiliser la fonction de scraping existante mais adaptee
             film_data = scraper_film_par_id(ia, movie_id, movie)
             if film_data:
+                if titre_deja_present(films_data, film_data):
+                    print(f"  ⊘ Titre déjà présent : {film_data.get('titre', movie_id)}")
+                    continue
                 nouveaux_films.append(film_data)
                 films_data.append(film_data)
         except Exception as e:
@@ -240,6 +272,19 @@ def enrichir_base_films(films_data, max_films_par_critere=3, cache_file="films_d
     return films_data
 
 
+def _person_name(person):
+    """Extrait le nom d'une Person Cinemagoer (objet ou dict)."""
+    if person is None:
+        return None
+    if hasattr(person, 'name') and person.name:
+        return person.name
+    if hasattr(person, 'myName') and person.myName:
+        return person.myName
+    if hasattr(person, 'get') and person.get('name'):
+        return person['name']
+    return str(person)
+
+
 def scraper_film_par_id(ia, movie_id, movie=None):
     """
     Scrape un film directement par son ID IMDb
@@ -248,6 +293,15 @@ def scraper_film_par_id(ia, movie_id, movie=None):
     try:
         if movie is None:
             movie = ia.get_movie(int(movie_id))
+        # Charger full credits d'abord (/fullcredits), puis main (/reference peut 404)
+        try:
+            ia.update(movie, ['full credits'])
+        except Exception:
+            pass
+        try:
+            ia.update(movie, ['main'])
+        except Exception:
+            pass
         
         titre = movie.get('title', f'Film {movie_id}')
         imdb_id = str(movie_id).zfill(7)
@@ -257,10 +311,14 @@ def scraper_film_par_id(ia, movie_id, movie=None):
         note = movie.get('rating')
         
         cast = movie.get('cast', [])
-        acteurs = [actor['name'] for actor in cast[:5]] if cast else []
+        acteurs = []
+        for actor in (cast or [])[:5]:
+            name = _person_name(actor)
+            if name:
+                acteurs.append(name)
         
-        directors = movie.get('directors', [])
-        realisateur = directors[0]['name'] if directors else None
+        directors = movie.get('directors', []) or movie.get('director', [])
+        realisateur = _person_name(directors[0]) if directors else None
         
         # Télécharger le poster
         poster = scraperFilms.telecharger_poster_omdb(titre, imdb_id)
@@ -279,7 +337,15 @@ def scraper_film_par_id(ia, movie_id, movie=None):
             "poster": poster
         }
         
-        print(f"  ✔ Film scrappé : {titre} ({annee})")
+        # OMDb uniquement pour le poster : compléter le poster si manquant (pas les autres champs)
+        if not film_data.get("poster"):
+            poster = scraperFilms.telecharger_poster_omdb(titre, imdb_id)
+            if not poster:
+                poster = scraperFilms.telecharger_poster_omdb(titre)
+            if poster:
+                film_data["poster"] = poster
+
+        print(f"  ✔ Film scrappé : {film_data.get('titre', titre)} ({film_data.get('annee', annee)})")
         return film_data
         
     except Exception as e:

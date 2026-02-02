@@ -34,13 +34,12 @@ Un système complet de recommandation de films basé sur un graphe pondéré, av
    pip install -r requirements.txt
    ```
 
-3. **Configurer la clé API**
-   ```bash
-   cp config/.env.example .env
-   # Éditer .env et remplacer "votre_cle_api_ici" par votre clé OMDb
-   ```
+3. **Configurer la clé API** (dans `.env`)
+   - `OMDB_API_KEY` : obligatoire (posters, infos films). Ex. : `cp config/.env.example .env`
 
-4. **Préparer la liste de films**
+4. **Cinemagoer (IMDb)** : si réalisateur/acteurs/recommandations restent vides, IMDb a peut‑être changé ses pages. Mettre à jour : `pip install -U git+https://github.com/cinemagoer/cinemagoer.git`
+
+5. **Préparer la liste de films**
    - Éditer `data/listeFilms.txt` (un film par ligne)
    - Format : `Titre du film` ou `Titre du film|imdb_id`
 
@@ -73,6 +72,21 @@ python -m src.server.serveurFichier
 - WASD / Flèches : Déplacer la caméra
 - Souris : Regarder autour
 
+### Tests et diagnostic (pourquoi on n’a pas de films à recommander ?)
+
+- **Tests unitaires dédup** : `python -m unittest tests.test_dedup_titres -v`
+- **Tests directs des bibliothèques** (Cinemagoer + OMDb, nécessite le réseau) :
+  ```bash
+  python -m unittest tests.test_bibliotheques -v
+  ```
+  Chaque test affiche ce que Cinemagoer et OMDb renvoient (search_movie, get_movie recommendations, réalisateur, acteur, OMDb strict). Ex. : si « Recommandations IMDb » = 0, c’est normal (IMDb a changé sa page) ; on s’appuie sur réalisateur, acteur et OMDb strict.
+- **Diagnostic flux complet** (scraping → enrichissement → arêtes → reco) pour un film :
+  ```bash
+  python tests/diagnostic_flux_reco.py Inception
+  python tests/diagnostic_flux_reco.py Challengers
+  ```
+  Affiche à chaque étape les entrées/sorties et un résumé des raisons possibles quand il n’y a pas de recommandations (0 films scrapés, 0 IDs nouveaux à l’enrichissement, 0 arêtes, etc.).
+
 ## 📁 Structure du Projet
 
 ```
@@ -98,6 +112,10 @@ exemple_filmGraph/
 │       └── billboard.frag               # Shader fragment
 ├── data/
 │   └── listeFilms.txt                   # Liste des films à traiter
+├── tests/
+│   ├── test_dedup_titres.py             # Tests dédup par titre
+│   ├── test_bibliotheques.py            # Tests directs Cinemagoer + OMDb
+│   └── diagnostic_flux_reco.py          # Diagnostic flux (scraping → reco)
 ├── output/                              # Sorties générées (graphe + posters)
 ├── requirements.txt                     # Dépendances Python
 ├── config/

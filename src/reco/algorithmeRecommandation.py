@@ -5,9 +5,19 @@ Identifie les films les plus connectés aux films connus
 """
 import json
 import os
+import re
 from collections import defaultdict
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+
+def _normaliser_titre_reco(titre):
+    """Normalise un titre pour dédup : enlève l'année en fin, majuscules, espaces fusionnés."""
+    if not titre or not isinstance(titre, str):
+        return ""
+    t = (titre or "").strip()
+    t = re.sub(r"\s*\(\d{4}\)\s*$", "", t)
+    return " ".join(t.upper().split())
 
 
 def charger_films_connus(fichier="listeFilms.txt"):
@@ -130,7 +140,7 @@ def penaliser_films_populaires(scores, aretes, facteur_penalite=0.1):
     return scores_penalises
 
 
-def recommander(films_data, aretes, titres_connus=None, top_n=10, penaliser_populaires=True):
+def recommander(films_data, aretes, titres_connus=None, top_n=10, penaliser_populaires=True, nb_films_saisis=None):
     """
     Fonction principale de recommandation
     
@@ -140,6 +150,8 @@ def recommander(films_data, aretes, titres_connus=None, top_n=10, penaliser_popu
         titres_connus: Set des titres de films connus (ou None pour charger depuis data/listeFilms.txt)
         top_n: Nombre de recommandations à retourner
         penaliser_populaires: Si True, pénalise les films trop populaires
+        nb_films_saisis: Si fourni, les N premiers films sont considérés "connus" (évite que les films
+                         enrichis avec le même titre, ex. Challengers 2016, soient pris pour des films saisis)
     
     Returns:
         Liste de tuples (index_film, score, film_data)
@@ -148,17 +160,20 @@ def recommander(films_data, aretes, titres_connus=None, top_n=10, penaliser_popu
     if titres_connus is None:
         titres_connus = charger_films_connus()
     
-    if not titres_connus:
+    if nb_films_saisis is not None and nb_films_saisis > 0:
+        # Les N premiers films sont ceux saisis par l'utilisateur (avant enrichissement)
+        indices_connus = set(range(min(nb_films_saisis, len(films_data))))
+    elif titres_connus:
+        # Sinon on matche par titre (un film enrichi peut matcher et être faux "connu")
+        indices_connus = identifier_films_connus(films_data, titres_connus)
+    else:
         print("✖ Aucun film connu identifié")
         return []
-    
-    # Identifier les indices des films connus
-    indices_connus = identifier_films_connus(films_data, titres_connus)
     
     if not indices_connus:
         print("✖ Aucun film connu trouvé dans les données")
         return []
-    
+
     print(f"✔ {len(indices_connus)} films connus identifiés")
     
     # Calculer les scores
@@ -179,7 +194,22 @@ def recommander(films_data, aretes, titres_connus=None, top_n=10, penaliser_popu
             recommandations.append((idx, data["score"], films_data[idx]))
     
     recommandations.sort(key=lambda x: x[1], reverse=True)
-    
+
+    # Dédupliquer par titre normalisé (garder la première = meilleur score)
+    vus = set()
+    dedup = []
+    for item in recommandations:
+        idx, score, film = item
+        titre_norm = _normaliser_titre_reco(
+            (film or {}).get("titre") or (film or {}).get("titre_original") or ""
+        )
+        if titre_norm and titre_norm in vus:
+            continue
+        if titre_norm:
+            vus.add(titre_norm)
+        dedup.append(item)
+    recommandations = dedup
+
     return recommandations[:top_n]
 
 

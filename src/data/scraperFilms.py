@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Module de web scraping pour récupérer les données de films
-Utilise Cinemagoer pour les données détaillées et OMDb pour les posters
+Module de web scraping pour récupérer les données de films.
+Cinemagoer (IMDb) : recherche, métadonnées (titre, acteurs, réalisateur, genres, etc.).
+OMDb : uniquement pour les posters (téléchargement d’image) ; pas de recherche ni de données.
 """
 import json
 import os
@@ -16,14 +17,12 @@ OUTPUT_DIR = os.path.join(PROJECT_ROOT, "output")
 POSTERS_DIR = os.path.join(OUTPUT_DIR, "posters")
 
 # Charger la clé API depuis .env ou utiliser une variable d'environnement
-def load_api_key():
-    """Charge la clé API depuis .env ou variable d'environnement"""
-    # D'abord essayer la variable d'environnement
-    api_key = os.getenv('OMDB_API_KEY')
+def _load_env_key(prefix):
+    """Charge une clé depuis .env ou variable d'environnement (ex: OMDB_API_KEY)."""
+    key_name = f"{prefix}_API_KEY"
+    api_key = os.getenv(key_name)
     if api_key:
         return api_key
-    
-    # Sinon, essayer de charger depuis .env à la racine ou dans config/
     env_paths = [
         os.path.join(PROJECT_ROOT, ".env"),
         os.path.join(PROJECT_ROOT, "config", ".env"),
@@ -34,13 +33,16 @@ def load_api_key():
                 with open(env_file, "r", encoding="utf-8") as f:
                     for line in f:
                         line = line.strip()
-                        if line.startswith("OMDB_API_KEY="):
+                        if line.startswith(f"{key_name}="):
                             return line.split("=", 1)[1].strip()
             except Exception:
                 pass
-    
-    # Fallback (ne devrait pas arriver en production)
-    return os.getenv('OMDB_API_KEY', 'b64880b7')
+    return os.getenv(key_name)
+
+
+def load_api_key():
+    """Clé OMDb."""
+    return _load_env_key("OMDB") or os.getenv("OMDB_API_KEY", "b64880b7")
 
 API_KEY = load_api_key()
 
@@ -171,6 +173,52 @@ def search_omdb_by_title(keyword, max_results=10):
     except Exception:
         return []
 
+
+def search_omdb_similar_strict(titre_film, annee, max_results=5):
+    """
+    Recherche OMDb par titre et ne garde que les films dont le titre correspond
+    vraiment (exact ou début du titre) et l'année est proche (±3 ans).
+    Évite d'ajouter "Lady Hamilton" quand on enrichit "Hamilton".
+    """
+    if not titre_film or annee is None:
+        return []
+    try:
+        encoded = quote_plus(titre_film.strip())
+        url = f"http://www.omdbapi.com/?s={encoded}&type=movie&page=1&apikey={API_KEY}"
+        r = requests.get(url, timeout=10)
+        r.raise_for_status()
+        data = r.json()
+        if data.get("Response") != "True":
+            return []
+        titre_ref = titre_film.strip().lower()
+        annee_ref = int(annee)
+        results = []
+        for item in data.get("Search", []):
+            if len(results) >= max_results:
+                break
+            title = (item.get("Title") or "").strip()
+            year_str = (item.get("Year") or "")[:4]
+            if not year_str.isdigit():
+                continue
+            year = int(year_str)
+            # ±10 ans pour inclure remakes / rééditions (ex. Challengers 2016 vs 2024)
+            if abs(year - annee_ref) > 10:
+                continue
+            # Titre du film doit être le début du résultat (exact ou suivi de " :", " (", etc.)
+            title_lower = title.lower()
+            if title_lower != titre_ref and not (
+                title_lower.startswith(titre_ref)
+                and (len(title_lower) == len(titre_ref) or title_lower[len(titre_ref) : len(titre_ref) + 1] in " (:-")
+            ):
+                continue
+            imdb_id = item.get("imdbID", "").replace("tt", "")
+            if imdb_id:
+                results.append(imdb_id.zfill(7))
+        return results
+    except Exception:
+        return []
+
+
 def filenamePoster(titre):
     """Convertit un titre de film en nom de fichier valide"""
     filename = titre.replace(" ", "_")
@@ -189,7 +237,7 @@ def filenamePoster(titre):
 
 def telecharger_poster_omdb(titre_film, imdb_id=None):
     """
-    Télécharge le poster d'un film via l'API OMDb
+    Télécharge le poster d'un film via l'API OMDb (seul usage d'OMDb : posters uniquement).
     Retourne le nom du fichier ou None
     """
     try:
@@ -303,32 +351,21 @@ def scraper_film(titre_film, ia, imdb_id=None):
             try:
                 movie_id = int(imdb_id.replace('tt', ''))
                 movie = ia.get_movie(movie_id)
-                # Charger les données complètes
+                # Charger full credits d'abord (URL /fullcredits), puis main (URL /reference peut 404)
                 try:
-                    ia.update(movie, ['main', 'full credits'])
+                    ia.update(movie, ['full credits'])
                 except Exception:
+                    pass
+                try:
                     ia.update(movie, ['main'])
+                except Exception:
+                    pass
                 titre_trouve = movie.get('title') if hasattr(movie, 'get') else getattr(movie, 'myTitle', titre_film)
                 print(f"  ✓ Film trouvé par ID IMDb: {titre_trouve}")
             except Exception as e:
                 print(f"  ⚠ Erreur avec l'ID IMDb {imdb_id}: {e}")
         
-        # Sinon, tenter OMDb pour rÃ©soudre un ID fiable
-        if not movie:
-            try:
-                omdb = _fetch_omdb_by_title(titre_film)
-                if omdb and omdb.get("imdbID"):
-                    imdb_id = omdb.get("imdbID", "").replace("tt", "")
-                    movie_id = int(imdb_id)
-                    movie = ia.get_movie(movie_id)
-                    try:
-                        ia.update(movie, ['main', 'full credits'])
-                    except Exception:
-                        ia.update(movie, ['main'])
-                    titre_trouve = movie.get('title') if hasattr(movie, 'get') else getattr(movie, 'myTitle', titre_film)
-                    print(f"  âœ“ Film trouvÃ© via OMDb ID: {titre_trouve}")
-            except Exception:
-                pass
+        # OMDb n'est utilisé que pour les posters ; on ne résout pas l'ID via OMDb.
 
         # Sinon, chercher par titre
         if not movie:
@@ -423,18 +460,25 @@ def scraper_film(titre_film, ia, imdb_id=None):
         except Exception as e:
             print(f"  ⚠ Erreur lors de l'extraction des acteurs: {e}")
         
-        # Réalisateur
+        # Réalisateur (Cinemagoer utilise parfois 'director' ou 'directors', et le parsing peut échouer)
         realisateur = None
         try:
-            directors = movie.get('directors') if hasattr(movie, 'get') else getattr(movie, 'directors', [])
+            directors = (
+                movie.get('directors') if hasattr(movie, 'get') else getattr(movie, 'directors', [])
+            ) or (
+                movie.get('director') if hasattr(movie, 'get') else getattr(movie, 'director', [])
+            )
             if directors:
-                director = directors[0]
-                if hasattr(director, 'name'):
-                    realisateur = director.name
-                elif hasattr(director, 'myName'):
-                    realisateur = director.myName
-                else:
-                    realisateur = str(director)
+                director = directors[0] if directors else None
+                if director is not None:
+                    if hasattr(director, 'name') and director.name:
+                        realisateur = director.name
+                    elif hasattr(director, 'myName') and director.myName:
+                        realisateur = director.myName
+                    elif hasattr(director, 'get') and director.get('name'):
+                        realisateur = director['name']
+                    else:
+                        realisateur = str(director) if director else None
         except Exception as e:
             print(f"  ⚠ Erreur lors de l'extraction du réalisateur: {e}")
         
@@ -459,17 +503,16 @@ def scraper_film(titre_film, ia, imdb_id=None):
             "poster": poster
         }
 
-        # Fallback OMDb si les donnÃ©es sont trop vides (ex: titre FR non rÃ©solu)
-        if (not film_data.get("poster")
-                or not film_data.get("genres")
-                or not film_data.get("realisateur")
-                or not film_data.get("acteurs")):
-            omdb = scraper_film_omdb(titre_film, imdb_id=imdb_id)
-            if omdb:
-                for key in ["genres", "annee", "acteurs", "realisateur", "note", "poster", "titre"]:
-                    if not film_data.get(key):
-                        film_data[key] = omdb.get(key)
-        
+        # OMDb uniquement pour le poster : compléter le poster si manquant (pas les autres champs)
+        if not film_data.get("poster"):
+            poster = telecharger_poster_omdb(titre, imdb_id)
+            if not poster:
+                poster = telecharger_poster_omdb(titre_film)
+            if not poster and map_title_fr_en(titre_film).lower() != (titre_film or "").lower():
+                poster = telecharger_poster_omdb(map_title_fr_en(titre_film))
+            if poster:
+                film_data["poster"] = poster
+
         print(f"✔ Film scrappé : {titre} ({annee})")
         return film_data
         
@@ -555,11 +598,8 @@ def scraper_tous_films(liste_films=None, cache_file="films_data.json", force_rel
             print(f"⊘ Film '{titre}' déjà dans le cache, ignoré")
             continue
         
-        # Utiliser Cinemagoer en priorit? (consigne)
+        # Cinemagoer uniquement pour les données ; OMDb uniquement pour les posters (dans scraper_film)
         film_data = scraper_film(titre, ia, imdb_id=imdb_id)
-        # Fallback OMDb si Cinemagoer ?choue
-        if not film_data:
-            film_data = scraper_film_omdb(titre, imdb_id=imdb_id)
         if film_data:
             nouveaux_films.append(film_data)
             films_data.append(film_data)

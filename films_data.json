@@ -1,282 +1,259 @@
 {
   "films": [
     {
-      "titre": "WALL·E",
-      "titre_original": "WALL·E",
-      "imdb_id": "0910970",
+      "titre": "Challengers",
+      "titre_original": "Challengers",
+      "imdb_id": "16426418",
       "genres": [
-        "Animation",
-        "Adventure",
-        "Family"
-      ],
-      "annee": 2008,
-      "acteurs": [
-        "Ben Burtt",
-        "Elissa Knight",
-        "Jeff Garlin"
-      ],
-      "realisateur": "Andrew Stanton",
-      "note": 8.4,
-      "poster": "output\\posters\\WALL·E.jpg"
-    },
-    {
-      "titre": "Big Hero 6",
-      "titre_original": "Big Hero 6",
-      "imdb_id": "2245084",
-      "genres": [
-        "Animation",
-        "Action",
-        "Adventure"
-      ],
-      "annee": 2014,
-      "acteurs": [
-        "Ryan Potter",
-        "Scott Adsit",
-        "Jamie Chung"
-      ],
-      "realisateur": "Don Hall, Chris Williams",
-      "note": 7.8,
-      "poster": "output\\posters\\Big_Hero_6.jpg"
-    },
-    {
-      "titre": "How to Train Your Dragon",
-      "titre_original": "How to Train Your Dragon",
-      "imdb_id": "0892769",
-      "genres": [
-        "Animation",
-        "Action",
-        "Adventure"
-      ],
-      "annee": 2010,
-      "acteurs": [
-        "Jay Baruchel",
-        "Gerard Butler",
-        "Christopher Mintz-Plasse"
-      ],
-      "realisateur": "Dean DeBlois, Chris Sanders",
-      "note": 8.1,
-      "poster": "output\\posters\\How_to_Train_Your_Dragon.jpg"
-    },
-    {
-      "titre": "The Incredibles",
-      "titre_original": "The Incredibles",
-      "imdb_id": "0317705",
-      "genres": [
-        "Animation",
-        "Action",
-        "Adventure"
-      ],
-      "annee": 2004,
-      "acteurs": [
-        "Craig T. Nelson",
-        "Samuel L. Jackson",
-        "Holly Hunter"
-      ],
-      "realisateur": "Brad Bird",
-      "note": 8.0,
-      "poster": "output\\posters\\The_Incredibles.jpg"
-    },
-    {
-      "titre": "Up",
-      "titre_original": "Up",
-      "imdb_id": "1049413",
-      "genres": [
-        "Animation",
-        "Adventure",
-        "Comedy"
-      ],
-      "annee": 2009,
-      "acteurs": [
-        "Edward Asner",
-        "Jordan Nagai",
-        "John Ratzenberger"
-      ],
-      "realisateur": "Pete Docter, Bob Peterson",
-      "note": 8.3,
-      "poster": "output\\posters\\Up.jpg"
-    },
-    {
-      "titre": "Spirited Away",
-      "titre_original": "Spirited Away",
-      "imdb_id": "0245429",
-      "genres": [
-        "Animation",
-        "Adventure",
-        "Family"
-      ],
-      "annee": 2001,
-      "acteurs": [
-        "Miyu Irino",
-        "Rumi Hiiragi",
-        "Mari Natsuki"
-      ],
-      "realisateur": "Hayao Miyazaki",
-      "note": 8.6,
-      "poster": "output\\posters\\Spirited_Away.jpg"
-    },
-    {
-      "titre": "My Neighbor Totoro",
-      "titre_original": "My Neighbor Totoro",
-      "imdb_id": "0096283",
-      "genres": [
-        "Animation",
-        "Adventure",
-        "Comedy"
-      ],
-      "annee": 1988,
-      "acteurs": [
-        "Hitoshi Takagi",
-        "Noriko Hidaka",
-        "Chika Sakamoto"
-      ],
-      "realisateur": "Hayao Miyazaki",
-      "note": 8.1,
-      "poster": "output\\posters\\My_Neighbor_Totoro.jpg"
-    },
-    {
-      "titre": "The Iron Giant",
-      "titre_original": "The Iron Giant",
-      "imdb_id": "0129167",
-      "genres": [
-        "Animation",
-        "Action",
-        "Adventure"
-      ],
-      "annee": 1999,
-      "acteurs": [
-        "Eli Marienthal",
-        "Harry Connick Jr.",
-        "Jennifer Aniston"
-      ],
-      "realisateur": "Brad Bird",
-      "note": 8.1,
-      "poster": "output\\posters\\The_Iron_Giant.jpg"
-    },
-    {
-      "titre": "Coraline",
-      "titre_original": "Coraline",
-      "imdb_id": "0327597",
-      "genres": [
-        "Animation",
+        "Comedy",
         "Drama",
-        "Family"
+        "Romance",
+        "Sport"
       ],
-      "annee": 2009,
+      "annee": 2024,
       "acteurs": [
-        "Dakota Fanning",
-        "Teri Hatcher",
-        "John Hodgman"
+        "",
+        "",
+        "",
+        "",
+        ""
       ],
-      "realisateur": "Henry Selick",
-      "note": 7.8,
-      "poster": "output\\posters\\Coraline.jpg"
+      "realisateur": "Luca Guadagnino",
+      "note": 7.0,
+      "poster": "output/posters/Challengers.jpg"
     },
     {
-      "titre": "Fantastic Mr. Fox",
-      "titre_original": "Fantastic Mr. Fox",
-      "imdb_id": "0432283",
+      "titre": "Hamilton",
+      "titre_original": "Hamilton",
+      "imdb_id": "8503618",
+      "genres": [
+        "Biography",
+        "Drama",
+        "History",
+        "Musical"
+      ],
+      "annee": 2020,
+      "acteurs": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "realisateur": "Thomas Kail",
+      "note": 8.3,
+      "poster": "output/posters/Hamilton.jpg"
+    },
+    {
+      "titre": "La La Land",
+      "titre_original": "La La Land",
+      "imdb_id": "3783958",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Music",
+        "Musical",
+        "Romance"
+      ],
+      "annee": 2016,
+      "acteurs": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "realisateur": "Damien Chazelle",
+      "note": 8.0,
+      "poster": "output/posters/La_La_Land.jpg"
+    },
+    {
+      "titre": "Spider-Man: Into the Spider-Verse",
+      "titre_original": "Spider-Man: Into the Spider-Verse",
+      "imdb_id": "4633694",
       "genres": [
         "Animation",
+        "Action",
         "Adventure",
-        "Comedy"
+        "Family",
+        "Fantasy",
+        "Sci-Fi"
+      ],
+      "annee": 2018,
+      "acteurs": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "realisateur": "Bob Persichetti",
+      "note": 8.4,
+      "poster": "output/posters/Spider-Man__Into_the_Spider-Verse.jpg"
+    },
+    {
+      "titre": "First Man",
+      "titre_original": "First Man",
+      "imdb_id": "1213641",
+      "genres": [
+        "Biography",
+        "Drama",
+        "History"
+      ],
+      "annee": 2018,
+      "acteurs": [
+        "Ryan Gosling",
+        "Claire Foy",
+        "Jason Clarke",
+        "Kyle Chandler",
+        "Corey Stoll"
+      ],
+      "realisateur": "Damien Chazelle",
+      "note": 7.3,
+      "poster": "output/posters/First_Man.jpg"
+    },
+    {
+      "titre": "Babylon",
+      "titre_original": "Babylon",
+      "imdb_id": "10640346",
+      "genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "annee": 2022,
+      "acteurs": [
+        "J.C. Currais",
+        "Diego Calva",
+        "Jimmy Ortega",
+        "Marcos A. Ferraez",
+        "Shane Powers"
+      ],
+      "realisateur": "Damien Chazelle",
+      "note": 7.1,
+      "poster": "output/posters/Babylon.jpg"
+    },
+    {
+      "titre": "Guy and Madeline on a Park Bench",
+      "titre_original": "Guy and Madeline on a Park Bench",
+      "imdb_id": "1337193",
+      "genres": [
+        "Drama",
+        "Musical"
       ],
       "annee": 2009,
       "acteurs": [
-        "George Clooney",
-        "Meryl Streep",
-        "Bill Murray"
+        "Jason Palmer",
+        "Desiree Garcia",
+        "Sandha Khin",
+        "Frank Garvin",
+        "Andre Hayward"
       ],
-      "realisateur": "Wes Anderson",
-      "note": 7.9,
-      "poster": "output\\posters\\Fantastic_Mr._Fox.jpg"
+      "realisateur": "Damien Chazelle",
+      "note": 6.0,
+      "poster": "output/posters/Guy_and_Madeline_on_a_Park_Bench.jpg"
     },
     {
-      "titre": "Spirited Away: Live on Stage",
-      "titre_original": "Spirited Away: Live on Stage",
-      "imdb_id": "27003039",
-      "genres": [],
-      "annee": 2022,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\Spirited_Away__Live_on_Stage.jpg"
-    },
-    {
-      "titre": "How to Train Your Dragon",
-      "titre_original": "How to Train Your Dragon",
-      "imdb_id": "26743210",
-      "genres": [],
-      "annee": 2025,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\How_to_Train_Your_Dragon.jpg"
-    },
-    {
-      "titre": "The Incredibles",
-      "titre_original": "The Incredibles",
-      "imdb_id": "32832609",
-      "genres": [],
-      "annee": 2024,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\The_Incredibles.jpg"
-    },
-    {
-      "titre": "How to Train Your Dragon 2",
-      "titre_original": "How to Train Your Dragon 2",
-      "imdb_id": "36416299",
-      "genres": [],
-      "annee": 2027,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\How_to_Train_Your_Dragon_2.jpg"
-    },
-    {
-      "titre": "How to Train Your Dragon 2",
-      "titre_original": "How to Train Your Dragon 2",
-      "imdb_id": "1646971",
-      "genres": [],
+      "titre": "Whiplash",
+      "titre_original": "Whiplash",
+      "imdb_id": "2582802",
+      "genres": [
+        "Drama",
+        "Music"
+      ],
       "annee": 2014,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\How_to_Train_Your_Dragon_2.jpg"
+      "acteurs": [
+        "Miles Teller",
+        "J.K. Simmons",
+        "Paul Reiser",
+        "Melissa Benoist",
+        "Austin Stowell"
+      ],
+      "realisateur": "Damien Chazelle",
+      "note": 8.5,
+      "poster": "output/posters/Whiplash.jpg"
     },
     {
-      "titre": "How to Train Your Dragon: The Hidden World",
-      "titre_original": "How to Train Your Dragon: The Hidden World",
-      "imdb_id": "2386490",
-      "genres": [],
-      "annee": 2019,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\How_to_Train_Your_Dragon__The_Hidden_World.jpg"
+      "titre": "Salvatore: Shoemaker of Dreams",
+      "titre_original": "Salvatore: Shoemaker of Dreams",
+      "imdb_id": "9467994",
+      "genres": [
+        "Documentary"
+      ],
+      "annee": 2020,
+      "acteurs": [
+        "Salvatore Ferragamo",
+        "Michael Stuhlbarg",
+        "Manolo Blahnik",
+        "Grace Coddington",
+        "Ferruccio Ferragamo"
+      ],
+      "realisateur": "Luca Guadagnino",
+      "note": 6.6,
+      "poster": "output/posters/Salvatore__Shoemaker_of_Dreams.jpg"
     },
     {
-      "titre": "Crazy Kwai Boo: Sanxingdui Spirited Away",
-      "titre_original": "Crazy Kwai Boo: Sanxingdui Spirited Away",
-      "imdb_id": "28443557",
-      "genres": [],
+      "titre": "Bones and All",
+      "titre_original": "Bones and All",
+      "imdb_id": "10168670",
+      "genres": [
+        "Drama",
+        "Horror",
+        "Romance"
+      ],
       "annee": 2022,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\Crazy_Kwai_Boo__Sanxingdui_Spirited_Away.jpg"
+      "acteurs": [
+        "Kendle Coffey",
+        "Taylor Russell",
+        "André Holland",
+        "Ellie Parker",
+        "Madeleine Hall"
+      ],
+      "realisateur": "Luca Guadagnino",
+      "note": 6.8,
+      "poster": "output/posters/Bones_and_All.jpg"
     },
     {
-      "titre": "Spirited Away: Live on Stage",
-      "titre_original": "Spirited Away: Live on Stage",
-      "imdb_id": "26678995",
-      "genres": [],
-      "annee": 2022,
-      "acteurs": [],
-      "realisateur": null,
-      "note": null,
-      "poster": "output\\posters\\Spirited_Away__Live_on_Stage.jpg"
+      "titre": "Queer",
+      "titre_original": "Queer",
+      "imdb_id": "24176060",
+      "genres": [
+        "Biography",
+        "Drama",
+        "History",
+        "Romance"
+      ],
+      "annee": 2024,
+      "acteurs": [
+        "Daniel Craig",
+        "Daan de Wit",
+        "Jason Schwartzman",
+        "Henrique Zaga",
+        "Colin Bates"
+      ],
+      "realisateur": "Luca Guadagnino",
+      "note": 6.4,
+      "poster": "output/posters/Queer.jpg"
+    },
+    {
+      "titre": "After the Hunt",
+      "titre_original": "After the Hunt",
+      "imdb_id": "32159989",
+      "genres": [
+        "Crime",
+        "Drama",
+        "Thriller"
+      ],
+      "annee": 2025,
+      "acteurs": [
+        "Julia Roberts",
+        "Ayo Edebiri",
+        "Andrew Garfield",
+        "Michael Stuhlbarg",
+        "Chloë Sevigny"
+      ],
+      "realisateur": "Luca Guadagnino",
+      "note": 5.7,
+      "poster": "output/posters/After_the_Hunt.jpg"
     }
   ]
 }

@@ -1,0 +1,55 @@
+{
+  "films": [
+    {
+      "titre": "Challengers",
+      "titre_original": "Challengers",
+      "imdb_id": "16426418",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "annee": 2024,
+      "acteurs": [
+        "Mike Faist",
+        "Josh O'Connor",
+        "Zendaya"
+      ],
+      "realisateur": "Luca Guadagnino",
+      "note": 7.0,
+      "poster": "output/posters/Challengers.jpg"
+    },
+    {
+      "titre": "La La Land",
+      "titre_original": "La La Land",
+      "imdb_id": "3783958",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Music"
+      ],
+      "annee": 2016,
+      "acteurs": [
+        "Ryan Gosling",
+        "Emma Stone",
+        "Rosemarie DeWitt"
+      ],
+      "realisateur": "Damien Chazelle",
+      "note": 8.0,
+      "poster": "output/posters/La_La_Land.jpg"
+    },
+    {
+      "titre": "Challengers",
+      "titre_original": "Challengers",
+      "imdb_id": "4539376",
+      "genres": [
+        "Action"
+      ],
+      "annee": 2016,
+      "acteurs": [],
+      "realisateur": null,
+      "note": null,
+      "poster": "output/posters/Challengers.jpg"
+    }
+  ]
+}
