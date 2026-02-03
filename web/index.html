@@ -65,6 +65,21 @@
       display: none;
       white-space: pre-wrap;
     }
+    #tooltip {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 20;
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: rgba(8, 12, 18, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--fg);
+      font-size: 12px;
+      pointer-events: none;
+      display: none;
+      max-width: 240px;
+    }
     canvas {
       display: block;
     }
@@ -121,6 +136,7 @@
     <p>Contrôles : clic + glisser pour orbiter, molette pour zoomer, clic droit pour déplacer.</p>
   </div>
   <div id="error"></div>
+  <div id="tooltip"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -214,13 +230,15 @@
       const fallbackMaterial = new THREE.MeshStandardMaterial({ color: 0xf4c24d });
       const spriteSize = Math.max(6, range * 0.06);
 
-      function addFallbackNode(node) {
+      function addFallbackNode(node, nodeIndex) {
         const sphere = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
         sphere.position.set(node.x, node.y, node.z);
+        sphere.userData = { nodeIndex: nodeIndex };
         spriteGroup.add(sphere);
       }
 
-      for (const n of graph.nodes) {
+      for (let i = 0; i < graph.nodes.length; i++) {
+        const n = graph.nodes[i];
         const texPath = resolveTexturePath(n.texture);
         if (texPath) {
           const sprite = new THREE.Sprite(
@@ -228,6 +246,7 @@
           );
           sprite.position.set(n.x, n.y, n.z);
           sprite.scale.set(spriteSize, spriteSize, 1);
+          sprite.userData = { nodeIndex: i };
           spriteGroup.add(sprite);
 
           textureLoader.load(
@@ -240,14 +259,43 @@
             () => {
               spriteGroup.remove(sprite);
               sprite.material.dispose();
-              addFallbackNode(n);
+              addFallbackNode(n, i);
             }
           );
         } else {
-          addFallbackNode(n);
+          addFallbackNode(n, i);
         }
       }
       scene.add(spriteGroup);
+
+      // Tooltip au survol des nœuds
+      const tooltipEl = document.getElementById("tooltip");
+      const mouse = new THREE.Vector2();
+      const raycaster = new THREE.Raycaster();
+      renderer.domElement.addEventListener("mousemove", function (event) {
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(spriteGroup.children);
+        if (intersects.length > 0 && intersects[0].object.userData.nodeIndex !== undefined) {
+          const idx = intersects[0].object.userData.nodeIndex;
+          const titre = (graph.nodes[idx] && graph.nodes[idx].titre) ? graph.nodes[idx].titre : "";
+          if (titre) {
+            tooltipEl.textContent = titre;
+            tooltipEl.style.left = (event.clientX + 12) + "px";
+            tooltipEl.style.top = (event.clientY + 12) + "px";
+            tooltipEl.style.display = "block";
+          } else {
+            tooltipEl.style.display = "none";
+          }
+        } else {
+          tooltipEl.style.display = "none";
+        }
+      });
+      renderer.domElement.addEventListener("mouseleave", function () {
+        tooltipEl.style.display = "none";
+      });
 
       // Edges
       if (graph.edges && graph.edges.length) {

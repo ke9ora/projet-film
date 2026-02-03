@@ -6,8 +6,8 @@ Un système complet de recommandation de films basé sur un graphe pondéré, av
 
 - **Web Scraping** : Récupération automatique des données de films via OMDb API et Cinemagoer
 - **Calcul de Similarités** : Calcul automatique des poids des arêtes basé sur :
-  - Acteurs communs (poids 0.4)
-  - Même réalisateur (poids 0.3)
+  - Acteurs communs (poids 0.3)
+  - Même réalisateur (poids 0.4)
   - Genres communs (poids 0.2)
   - Proximité d'année (poids 0.1)
 - **Filtrage du Graphe** : Suppression des arêtes faibles selon un seuil configurable
@@ -45,22 +45,40 @@ Un système complet de recommandation de films basé sur un graphe pondéré, av
 
 ## 📖 Utilisation
 
-### Générer le graphe complet
+### Générer le graphe et les recommandations
+
+Pour obtenir des **recommandations** (films proches de ceux que vous aimez), il faut enrichir la base avec des films similaires. Depuis la racine du projet :
 
 ```bash
-python -m src.graph.genererGrapheComplet
+python -m src.graph.genererGrapheComplet --enrichir
 ```
+
+Sans `--enrichir`, seuls les films de `data/listeFilms.txt` sont utilisés ; ils sont tous considérés comme « connus », donc aucune recommandation n’est affichée.
 
 **Options disponibles :**
 - `--force` ou `-f` : Force le re-scraping (ignore le cache)
-- `--seuil 0.3` : Change le seuil de filtrage des arêtes (défaut: 0.5)
-- `--enrichir` ou `-e` : Enrichit automatiquement la base avec des films similaires
-- `--max-films 5` : Nombre max de films à ajouter par critère (avec --enrichir)
+- `--seuil 0.3` : Change le seuil de filtrage des arêtes (défaut : 0.25)
+- `--enrichir` ou `-e` : Enrichit la base avec des films similaires (recommandé pour avoir des reco)
+- `--max-films 5` : Nombre max de films à ajouter par critère (avec `--enrichir`)
 
-### Visualiser le graphe
+### Démo web (recommandations)
+
+Interface pour saisir une liste de films et afficher les recommandations :
 
 ```bash
 # Lancer le serveur
+python -m src.server.serveurFichier
+
+# Ouvrir dans le navigateur
+# http://localhost:8000/web/reco.html
+```
+
+Saisir un ou plusieurs films (un par ligne), cocher « Enrichir la base » si besoin, puis cliquer sur « Calculer les recommandations ».
+
+### Visualiser le graphe 3D
+
+```bash
+# Même serveur que ci-dessus
 python -m src.server.serveurFichier
 
 # Ouvrir dans le navigateur
@@ -75,6 +93,7 @@ python -m src.server.serveurFichier
 ### Tests et diagnostic (pourquoi on n’a pas de films à recommander ?)
 
 - **Tests unitaires dédup** : `python -m unittest tests.test_dedup_titres -v`
+- **Tests recommandation (position)** : `python -m unittest tests.test_reco_position -v`
 - **Tests directs des bibliothèques** (Cinemagoer + OMDb, nécessite le réseau) :
   ```bash
   python -m unittest tests.test_bibliotheques -v
@@ -106,7 +125,8 @@ exemple_filmGraph/
 │   └── server/
 │       └── serveurFichier.py            # Serveur HTTP
 ├── web/
-│   ├── index.html                       # Visualisation 3D
+│   ├── index.html                       # Visualisation 3D du graphe
+│   ├── reco.html                        # Interface recommandations (liste + reco)
 │   └── shaders/
 │       ├── billboard.vert               # Shader vertex
 │       └── billboard.frag               # Shader fragment

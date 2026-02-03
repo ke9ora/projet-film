@@ -16,29 +16,18 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..
 
 def _completer_films_manquants(films_data):
     """
-    Complète les champs vides via OMDb pour permettre l'enrichissement.
+    Complète uniquement le poster via OMDb si manquant (OMDb réservé aux posters).
     """
     updated = 0
     for film in films_data:
-        if not isinstance(film, dict):
-            continue
-        missing = (
-            not film.get("genres")
-            or not film.get("acteurs")
-            or not film.get("realisateur")
-            or not film.get("poster")
-        )
-        if not missing:
+        if not isinstance(film, dict) or film.get("poster"):
             continue
         titre = film.get("titre_original") or film.get("titre")
         imdb_id = film.get("imdb_id")
-        omdb = scraperFilms.scraper_film_omdb(titre, imdb_id=imdb_id)
-        if not omdb:
-            continue
-        for key in ["genres", "annee", "acteurs", "realisateur", "note", "poster", "titre"]:
-            if not film.get(key):
-                film[key] = omdb.get(key)
-        updated += 1
+        poster = scraperFilms.telecharger_poster_omdb(titre, imdb_id=imdb_id)
+        if poster:
+            film["poster"] = poster
+            updated += 1
     return updated
 
 class CORSRequestHandler(SimpleHTTPRequestHandler):

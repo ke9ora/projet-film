@@ -78,7 +78,11 @@ def main():
     
     print(f"✔ {len(films_data)} films disponibles")
     print()
-    
+    # Films "connus" = les N premiers (liste utilisateur) ; si cache chargé, garder N = taille liste
+    nb_films_saisis = min(len(liste_films), len(films_data))
+    if not nb_films_saisis:
+        nb_films_saisis = len(films_data)
+
     # 2.5. Enrichir la base avec des films similaires (optionnel)
     enrichir = "--enrichir" in sys.argv or "-e" in sys.argv
     if enrichir:
@@ -139,7 +143,8 @@ def main():
     recommandations = algorithmeRecommandation.recommander(
         films_data,
         aretes_filtrees,
-        top_n=10
+        top_n=10,
+        nb_films_saisis=nb_films_saisis
     )
     
     if recommandations:

@@ -92,6 +92,28 @@
       "poster": "output/posters/Spider-Man__Into_the_Spider-Verse.jpg"
     },
     {
+      "titre": "Queer",
+      "titre_original": "Queer",
+      "imdb_id": "24176060",
+      "genres": [
+        "Biography",
+        "Drama",
+        "History",
+        "Romance"
+      ],
+      "annee": 2024,
+      "acteurs": [
+        "Daniel Craig",
+        "Daan de Wit",
+        "Jason Schwartzman",
+        "Henrique Zaga",
+        "Colin Bates"
+      ],
+      "realisateur": "Luca Guadagnino",
+      "note": 6.4,
+      "poster": "output/posters/Queer.jpg"
+    },
+    {
       "titre": "First Man",
       "titre_original": "First Man",
       "imdb_id": "1213641",
@@ -113,26 +135,6 @@
       "poster": "output/posters/First_Man.jpg"
     },
     {
-      "titre": "Babylon",
-      "titre_original": "Babylon",
-      "imdb_id": "10640346",
-      "genres": [
-        "Comedy",
-        "Drama"
-      ],
-      "annee": 2022,
-      "acteurs": [
-        "J.C. Currais",
-        "Diego Calva",
-        "Jimmy Ortega",
-        "Marcos A. Ferraez",
-        "Shane Powers"
-      ],
-      "realisateur": "Damien Chazelle",
-      "note": 7.1,
-      "poster": "output/posters/Babylon.jpg"
-    },
-    {
       "titre": "Guy and Madeline on a Park Bench",
       "titre_original": "Guy and Madeline on a Park Bench",
       "imdb_id": "1337193",
@@ -151,6 +153,27 @@
       "realisateur": "Damien Chazelle",
       "note": 6.0,
       "poster": "output/posters/Guy_and_Madeline_on_a_Park_Bench.jpg"
+    },
+    {
+      "titre": "Bones and All",
+      "titre_original": "Bones and All",
+      "imdb_id": "10168670",
+      "genres": [
+        "Drama",
+        "Horror",
+        "Romance"
+      ],
+      "annee": 2022,
+      "acteurs": [
+        "Kendle Coffey",
+        "Taylor Russell",
+        "André Holland",
+        "Ellie Parker",
+        "Madeleine Hall"
+      ],
+      "realisateur": "Luca Guadagnino",
+      "note": 6.8,
+      "poster": "output/posters/Bones_and_All.jpg"
     },
     {
       "titre": "Whiplash",
@@ -192,49 +215,6 @@
       "poster": "output/posters/Salvatore__Shoemaker_of_Dreams.jpg"
     },
     {
-      "titre": "Bones and All",
-      "titre_original": "Bones and All",
-      "imdb_id": "10168670",
-      "genres": [
-        "Drama",
-        "Horror",
-        "Romance"
-      ],
-      "annee": 2022,
-      "acteurs": [
-        "Kendle Coffey",
-        "Taylor Russell",
-        "André Holland",
-        "Ellie Parker",
-        "Madeleine Hall"
-      ],
-      "realisateur": "Luca Guadagnino",
-      "note": 6.8,
-      "poster": "output/posters/Bones_and_All.jpg"
-    },
-    {
-      "titre": "Queer",
-      "titre_original": "Queer",
-      "imdb_id": "24176060",
-      "genres": [
-        "Biography",
-        "Drama",
-        "History",
-        "Romance"
-      ],
-      "annee": 2024,
-      "acteurs": [
-        "Daniel Craig",
-        "Daan de Wit",
-        "Jason Schwartzman",
-        "Henrique Zaga",
-        "Colin Bates"
-      ],
-      "realisateur": "Luca Guadagnino",
-      "note": 6.4,
-      "poster": "output/posters/Queer.jpg"
-    },
-    {
       "titre": "After the Hunt",
       "titre_original": "After the Hunt",
       "imdb_id": "32159989",
@@ -254,6 +234,237 @@
       "realisateur": "Luca Guadagnino",
       "note": 5.7,
       "poster": "output/posters/After_the_Hunt.jpg"
+    },
+    {
+      "titre": "Babylon",
+      "titre_original": "Babylon",
+      "imdb_id": "10640346",
+      "genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "annee": 2022,
+      "acteurs": [
+        "J.C. Currais",
+        "Diego Calva",
+        "Jimmy Ortega",
+        "Marcos A. Ferraez",
+        "Shane Powers"
+      ],
+      "realisateur": "Damien Chazelle",
+      "note": 7.1,
+      "poster": "output/posters/Babylon.jpg"
+    },
+    {
+      "titre": "Savage House",
+      "titre_original": "Savage House",
+      "imdb_id": "31349852",
+      "genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "annee": 2026,
+      "acteurs": [
+        "Richard E. Grant",
+        "Claire Foy",
+        "Sebastian Armesto",
+        "Roger Ashton-Griffiths",
+        "Erin Battle"
+      ],
+      "realisateur": "Peter Glanz",
+      "note": null,
+      "poster": null
+    },
+    {
+      "titre": "H Is for Hawk",
+      "titre_original": "H Is for Hawk",
+      "imdb_id": "10329560",
+      "genres": [
+        "Drama"
+      ],
+      "annee": 2025,
+      "acteurs": [
+        "Claire Foy",
+        "Brendan Gleeson",
+        "Lindsay Duncan",
+        "Imogen Dufty",
+        "Denise Gough"
+      ],
+      "realisateur": "Philippa Lowthorpe",
+      "note": 6.8,
+      "poster": "output/posters/H_Is_for_Hawk.jpg"
+    },
+    {
+      "titre": "Eternity",
+      "titre_original": "Eternity",
+      "imdb_id": "24950660",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Fantasy",
+        "Romance"
+      ],
+      "annee": 2025,
+      "acteurs": [
+        "Barry Primus",
+        "Betty Buckley",
+        "Darryl Scheelar",
+        "Danny Mac",
+        "Damon Johnson"
+      ],
+      "realisateur": "David Freyne",
+      "note": 7.0,
+      "poster": "output/posters/Eternity.jpg"
+    },
+    {
+      "titre": "The Gorge",
+      "titre_original": "The Gorge",
+      "imdb_id": "13654226",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Horror",
+        "Romance",
+        "Sci-Fi"
+      ],
+      "annee": 2025,
+      "acteurs": [
+        "Miles Teller",
+        "Anya Taylor-Joy",
+        "Sigourney Weaver",
+        "Sope Dirisu",
+        "William Houston"
+      ],
+      "realisateur": "Scott Derrickson",
+      "note": 6.7,
+      "poster": "output/posters/The_Gorge.jpg"
+    },
+    {
+      "titre": "Mother Couch",
+      "titre_original": "Mother Couch",
+      "imdb_id": "23778430",
+      "genres": [
+        "Comedy",
+        "Drama"
+      ],
+      "annee": 2023,
+      "acteurs": [
+        "Ewan McGregor",
+        "Rhys Ifans",
+        "Taylor Russell",
+        "Ellen Burstyn",
+        "Lake Bell"
+      ],
+      "realisateur": "Niclas Larsson",
+      "note": 5.3,
+      "poster": "output/posters/Mother_Couch.jpg"
+    },
+    {
+      "titre": "Wake Up Dead Man",
+      "titre_original": "Wake Up Dead Man",
+      "imdb_id": "14364480",
+      "genres": [
+        "Comedy",
+        "Crime",
+        "Drama",
+        "Mystery",
+        "Thriller"
+      ],
+      "annee": 2025,
+      "acteurs": [
+        "Daniel Craig",
+        "Josh O'Connor",
+        "Glenn Close",
+        "Josh Brolin",
+        "Mila Kunis"
+      ],
+      "realisateur": "Rian Johnson",
+      "note": 7.4,
+      "poster": "output/posters/Wake_Up_Dead_Man.jpg"
+    },
+    {
+      "titre": "Terroir",
+      "titre_original": "Terroir",
+      "imdb_id": "2202593",
+      "genres": [
+        "Drama",
+        "Mystery",
+        "Thriller"
+      ],
+      "annee": 2014,
+      "acteurs": [
+        "Keith Carradine",
+        "Gaetano Guarino",
+        "Fabio Marini",
+        "Lina Otto",
+        "Salvatore Ferragamo"
+      ],
+      "realisateur": "John Jopson",
+      "note": 7.2,
+      "poster": null
+    },
+    {
+      "titre": "Driver's Ed",
+      "titre_original": "Driver's Ed",
+      "imdb_id": "9308022",
+      "genres": [
+        "Action",
+        "Comedy",
+        "Romance"
+      ],
+      "annee": 2025,
+      "acteurs": [
+        "Sam Nivola",
+        "Sophie Telegadis",
+        "Mohana Krishnan",
+        "Aidan Laprete",
+        "Kumail Nanjiani"
+      ],
+      "realisateur": "Bobby Farrelly",
+      "note": 6.7,
+      "poster": "output/posters/Driver_s_Ed.jpg"
+    },
+    {
+      "titre": "The Amateur",
+      "titre_original": "The Amateur",
+      "imdb_id": "0899043",
+      "genres": [
+        "Action",
+        "Thriller"
+      ],
+      "annee": 2025,
+      "acteurs": [
+        "Rami Malek",
+        "Rachel Brosnahan",
+        "Jon Bernthal",
+        "Evan Milton",
+        "Nick Mills"
+      ],
+      "realisateur": "James Hawes",
+      "note": 6.5,
+      "poster": "output/posters/The_Amateur.jpg"
+    },
+    {
+      "titre": "The Fall Guy",
+      "titre_original": "The Fall Guy",
+      "imdb_id": "1684562",
+      "genres": [
+        "Action",
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "annee": 2024,
+      "acteurs": [
+        "Ryan Gosling",
+        "Emily Blunt",
+        "Aaron Taylor-Johnson",
+        "Hannah Waddingham",
+        "Teresa Palmer"
+      ],
+      "realisateur": "David Leitch",
+      "note": 6.8,
+      "poster": "output/posters/The_Fall_Guy.jpg"
     }
   ]
 }

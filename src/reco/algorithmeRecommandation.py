@@ -156,20 +156,14 @@ def recommander(films_data, aretes, titres_connus=None, top_n=10, penaliser_popu
     Returns:
         Liste de tuples (index_film, score, film_data)
     """
-    # Charger les films connus si non fourni
-    if titres_connus is None:
-        titres_connus = charger_films_connus()
-    
+    # Films connus = N premiers (position uniquement, pas de recherche par titre)
+    if nb_films_saisis is None:
+        nb_films_saisis = len(charger_films_connus())
     if nb_films_saisis is not None and nb_films_saisis > 0:
-        # Les N premiers films sont ceux saisis par l'utilisateur (avant enrichissement)
         indices_connus = set(range(min(nb_films_saisis, len(films_data))))
-    elif titres_connus:
-        # Sinon on matche par titre (un film enrichi peut matcher et être faux "connu")
-        indices_connus = identifier_films_connus(films_data, titres_connus)
     else:
-        print("✖ Aucun film connu identifié")
-        return []
-    
+        indices_connus = set()
+
     if not indices_connus:
         print("✖ Aucun film connu trouvé dans les données")
         return []

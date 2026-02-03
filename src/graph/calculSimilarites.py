@@ -16,8 +16,8 @@ def calculer_similarite_acteurs(film1, film2):
     Calcule la similarité basée sur les acteurs communs
     Retourne un score entre 0 et 1
     """
-    acteurs1 = set(film1.get("acteurs", []))
-    acteurs2 = set(film2.get("acteurs", []))
+    acteurs1 = set(a for a in film1.get("acteurs", []) if a and str(a).strip())
+    acteurs2 = set(a for a in film2.get("acteurs", []) if a and str(a).strip())
     
     if not acteurs1 or not acteurs2:
         return 0.0

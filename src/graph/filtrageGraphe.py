@@ -12,7 +12,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..
 
 # Seuil de poids configurable
 # Les arêtes avec un poids inférieur seront supprimées
-SEUIL_POIDS = 0.5
+SEUIL_POIDS = 0.25
 
 
 def filtrer_aretes(aretes, seuil=SEUIL_POIDS):
@@ -121,7 +121,8 @@ def generer_graph_json(films_data, aretes_filtrees, positions, output_file="grap
             "x": round(pos["x"], 2),
             "y": round(pos["y"], 2),
             "z": round(pos["z"], 2),
-            "texture": film.get("poster", "default.jpg")
+            "texture": film.get("poster", "default.jpg"),
+            "titre": film.get("titre", "") or film.get("titre_original", "")
         }
         nodes.append(node)
     

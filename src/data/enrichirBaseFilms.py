@@ -93,7 +93,7 @@ def trouver_films_par_acteur(ia, nom_acteur, limite=5):
                 if films:
                     break
         if not films:
-            print(f"  âš  Aucune filmographie trouvÃ©e pour l'acteur '{nom_acteur}'")
+            print(f"  ⚠ Aucune filmographie trouvée pour l'acteur '{nom_acteur}'")
         
         # Filtrer pour ne garder que les films (pas les séries)
         film_ids = []
@@ -140,7 +140,7 @@ def trouver_films_par_realisateur(ia, nom_realisateur, limite=5):
                 if films:
                     break
         if not films:
-            print(f"  âš  Aucune filmographie trouvÃ©e pour le rÃ©alisateur '{nom_realisateur}'")
+            print(f"  ⚠ Aucune filmographie trouvée pour le réalisateur '{nom_realisateur}'")
         
         film_ids = []
         for film in films[:limite]:

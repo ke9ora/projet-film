@@ -444,19 +444,29 @@ def scraper_film(titre_film, ia, imdb_id=None):
         annee = movie.get('year') if hasattr(movie, 'get') else getattr(movie, 'year', None)
         note = movie.get('rating') if hasattr(movie, 'get') else getattr(movie, 'rating', None)
         
-        # Acteurs (limiter à 5 principaux)
+        # Acteurs (limiter à 5 principaux, noms non vides uniquement)
         acteurs = []
         try:
             cast = movie.get('cast') if hasattr(movie, 'get') else getattr(movie, 'cast', [])
             if cast:
-                # cast peut être une liste de Person objects
-                for actor in cast[:5]:
-                    if hasattr(actor, 'name'):
-                        acteurs.append(actor.name)
-                    elif hasattr(actor, 'myName'):
-                        acteurs.append(actor.myName)
+                for actor in cast[:10]:  # parcourir un peu plus pour remplir 5 noms après filtrage
+                    name = None
+                    if hasattr(actor, 'get') and actor.get('name'):
+                        name = actor.get('name')
+                    elif hasattr(actor, 'name') and actor.name:
+                        name = actor.name
+                    elif hasattr(actor, 'myName') and actor.myName:
+                        name = actor.myName
                     else:
-                        acteurs.append(str(actor))
+                        try:
+                            name = actor['name'] if hasattr(actor, '__getitem__') else None
+                        except (KeyError, TypeError):
+                            s = str(actor).strip()
+                            name = s if s else None
+                    if name and str(name).strip():
+                        acteurs.append(str(name).strip())
+                        if len(acteurs) >= 5:
+                            break
         except Exception as e:
             print(f"  ⚠ Erreur lors de l'extraction des acteurs: {e}")
         
